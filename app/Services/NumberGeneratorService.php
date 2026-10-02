@@ -33,7 +33,9 @@ class NumberGeneratorService
             $nextNumber = $counter->last_number + 1;
             $counter->update(['last_number' => $nextNumber]);
 
-            return sprintf('%s/%04d/%02d/%04d', $documentType, $year, $month, $nextNumber);
+            $prefix = $documentType === 'INVOICE' ? 'INV' : $documentType;
+
+            return sprintf('%s/%04d/%02d/%04d', $prefix, $year, $month, $nextNumber);
         });
     }
 }

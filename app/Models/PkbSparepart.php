@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PkbSparepart extends Model
 {
@@ -32,5 +33,10 @@ class PkbSparepart extends Model
     public function sparepart(): BelongsTo
     {
         return $this->belongsTo(Sparepart::class);
+    }
+
+    public function documentations(): HasMany
+    {
+        return $this->hasMany(Documentation::class);
     }
 }

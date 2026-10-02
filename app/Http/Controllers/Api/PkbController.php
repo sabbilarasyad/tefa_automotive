@@ -58,7 +58,7 @@ class PkbController extends Controller
         $this->authorize('view', $pkb);
 
         return ApiResponse::success(
-            $pkb->load(['customer', 'vehicle', 'mechanic', 'services', 'spareparts', 'statusHistories']),
+            $pkb->load(['customer', 'vehicle', 'mechanic', 'services', 'spareparts', 'documentations', 'statusHistories']),
             'Detail PKB berhasil diambil.',
         );
     }

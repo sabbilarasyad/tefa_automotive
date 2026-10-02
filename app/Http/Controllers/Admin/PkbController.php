@@ -21,12 +21,16 @@ class PkbController extends Controller
 {
     public function __construct(private PkbWorkflowService $workflow) {}
 
-    public function index(): View
+    public function index(): View|RedirectResponse
     {
         $this->authorize('viewAny', Pkb::class);
 
         $query = Pkb::query()->with(['customer', 'vehicle', 'mechanic']);
         $user = request()->user();
+
+        if ($user->hasPermission('pkb.view_own') && ! $user->hasPermission('pkb.view_all')) {
+            return redirect()->route('mechanic.tasks');
+        }
 
         if ($user->hasPermission('pkb.view_all')) {
             // The permission matrix grants this role an unscoped list.
@@ -87,7 +91,15 @@ class PkbController extends Controller
     public function show(Pkb $pkb): View
     {
         $this->authorize('view', $pkb);
-        $pkb->load(['customer', 'vehicle', 'mechanic', 'services', 'spareparts', 'statusHistories.changer']);
+        $pkb->load([
+            'customer',
+            'vehicle',
+            'mechanic',
+            'services.documentations',
+            'spareparts.sparepart',
+            'spareparts.documentations',
+            'statusHistories.changer',
+        ]);
 
         return view('admin.pkb.show', [
             'pkb' => $pkb,

@@ -25,6 +25,9 @@
             <p class="mt-1 text-sm text-[#687671]">Dibuat {{ $pkb->service_date->format('d M Y, H:i') }}</p>
         </div>
         <div class="flex flex-wrap gap-2">
+            @can('viewProgress', $pkb)
+                <a class="btn-secondary text-sm" href="{{ route('admin.pkb.progress.show', $pkb) }}">Input Progres</a>
+            @endcan
             @if ($pkb->mechanic_id)
                 @can('print', $pkb)
                     <a class="btn-primary text-sm" href="{{ route('admin.pkb.print', $pkb) }}">Cetak PKB</a>
@@ -65,16 +68,20 @@
                 <h2 class="mb-4 font-bold">Jasa & sparepart rencana</h2>
                 <div class="overflow-x-auto">
                     <table class="w-full min-w-[500px] text-left text-sm">
-                        <thead class="border-b border-[#dce5e1] text-xs uppercase text-[#687671]"><tr><th class="py-2">Item</th><th class="py-2 text-right">Qty</th><th class="py-2 text-right">Jumlah</th></tr></thead>
+                        <thead class="border-b border-[#dce5e1] text-xs uppercase text-[#687671]"><tr><th class="py-2">Item</th><th class="py-2 text-right">Qty rencana / aktual</th><th class="py-2 text-right">Jumlah</th></tr></thead>
                         <tbody class="divide-y divide-[#e7eeea]">
                             @foreach ($pkb->services as $item)
-                                <tr><td class="py-3">{{ $item->name_snapshot }} <span class="text-xs text-[#687671]">· Jasa</span></td><td class="py-3 text-right">{{ $item->qty }}</td><td class="py-3 text-right">Rp{{ number_format((float) $item->subtotal, 0, ',', '.') }}</td></tr>
+                                <tr><td class="py-3">{{ $item->name_snapshot }} <span class="text-xs text-[#687671]">· Jasa</span>
+                                    @if ($item->documentations->isNotEmpty())<div class="mt-2 flex gap-2">@foreach ($item->documentations as $documentation)<a href="{{ Storage::disk('public')->url($documentation->file_path) }}" target="_blank" rel="noopener"><img class="size-12 rounded-sm object-cover" src="{{ Storage::disk('public')->url($documentation->file_path) }}" alt="Dokumentasi {{ $item->name_snapshot }}"></a>@endforeach</div>@endif
+                                </td><td class="py-3 text-right">{{ $item->qty }}</td><td class="py-3 text-right">Rp{{ number_format((float) $item->subtotal, 0, ',', '.') }}</td></tr>
                             @endforeach
                             @foreach ($pkb->spareparts as $item)
-                                <tr><td class="py-3">{{ $item->name_snapshot }} <span class="text-xs text-[#687671]">· Part</span></td><td class="py-3 text-right">{{ $item->qty_planned }}</td><td class="py-3 text-right">Rp{{ number_format((float) $item->subtotal, 0, ',', '.') }}</td></tr>
+                                <tr><td class="py-3">{{ $item->name_snapshot }} <span class="text-xs text-[#687671]">· Part</span>
+                                    @if ($item->documentations->isNotEmpty())<div class="mt-2 flex gap-2">@foreach ($item->documentations as $documentation)<a href="{{ Storage::disk('public')->url($documentation->file_path) }}" target="_blank" rel="noopener"><img class="size-12 rounded-sm object-cover" src="{{ Storage::disk('public')->url($documentation->file_path) }}" alt="Dokumentasi {{ $item->name_snapshot }}"></a>@endforeach</div>@endif
+                                </td><td class="py-3 text-right">{{ $item->qty_planned }} @if ($item->qty_used !== null)<span class="block text-xs text-[#126b56]">{{ $item->qty_used }} aktual</span>@endif</td><td class="py-3 text-right">Rp{{ number_format((float) $item->subtotal, 0, ',', '.') }}</td></tr>
                             @endforeach
                         </tbody>
-                        <tfoot><tr class="font-bold"><td colspan="2" class="pt-4">Estimasi</td><td class="pt-4 text-right">Rp{{ number_format((float) $pkb->estimated_total, 0, ',', '.') }}</td></tr></tfoot>
+                        <tfoot><tr class="font-bold"><td colspan="2" class="pt-4">{{ $pkb->status === 'WAITING_PAYMENT' || $pkb->status === 'PAID' || $pkb->status === 'CLOSED' ? 'Total final' : 'Estimasi' }}</td><td class="pt-4 text-right">Rp{{ number_format((float) (($pkb->final_total > 0) ? $pkb->final_total : $pkb->estimated_total), 0, ',', '.') }}</td></tr></tfoot>
                     </table>
                 </div>
             </section>

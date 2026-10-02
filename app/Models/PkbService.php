@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PkbService extends Model
 {
@@ -32,5 +33,10 @@ class PkbService extends Model
     public function service(): BelongsTo
     {
         return $this->belongsTo(Service::class);
+    }
+
+    public function documentations(): HasMany
+    {
+        return $this->hasMany(Documentation::class);
     }
 }

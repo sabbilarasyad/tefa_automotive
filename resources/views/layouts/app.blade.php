@@ -17,7 +17,14 @@
                     </span>
                 </a>
                 <nav class="flex items-center gap-2 sm:gap-5">
-                    <a href="{{ route('admin.pkb.index') }}" class="text-sm font-semibold text-[#34433e] hover:text-[#126b56]">Daftar PKB</a>
+                    @if (auth()->user()->hasPermission('pkb.view_own') && ! auth()->user()->hasPermission('pkb.view_all'))
+                        <a href="{{ route('mechanic.tasks') }}" class="text-sm font-semibold text-[#34433e] hover:text-[#126b56]">Tugas & Riwayat Saya</a>
+                    @else
+                        <a href="{{ route('admin.pkb.index') }}" class="text-sm font-semibold text-[#34433e] hover:text-[#126b56]">Daftar PKB</a>
+                    @endif
+                    @can('viewProgressList', App\Models\Pkb::class)
+                        <a href="{{ route('admin.pkb.progress.index') }}" class="hidden text-sm font-semibold text-[#34433e] hover:text-[#126b56] lg:inline">Progres Pekerjaan</a>
+                    @endcan
                     @can('create', App\Models\Pkb::class)
                         <a href="{{ route('admin.pkb.create') }}" class="hidden text-sm font-semibold text-[#34433e] hover:text-[#126b56] sm:inline">Servis Baru</a>
                     @endcan

@@ -75,5 +75,23 @@ class PkbDatabaseTriggerTest extends TestCase
         } catch (QueryException) {
             $this->assertDatabaseHas('spareparts', ['id' => $sparepart->id, 'stock_qty' => 3]);
         }
+
+        try {
+            DB::table('stock_movements')->insert([
+                'sparepart_id' => $sparepart->id,
+                'type' => 'OUT',
+                'qty_in' => 0,
+                'qty_out' => 4,
+                'stock_before' => 3,
+                'stock_after' => -1,
+                'reason' => 'Trigger oversell test',
+                'created_by' => $creator->id,
+                'created_at' => now(),
+            ]);
+            $this->fail('Stock movement trigger should reject a negative resulting stock.');
+        } catch (QueryException) {
+            $this->assertDatabaseHas('spareparts', ['id' => $sparepart->id, 'stock_qty' => 3]);
+            $this->assertDatabaseMissing('stock_movements', ['reason' => 'Trigger oversell test']);
+        }
     }
 }

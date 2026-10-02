@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PkbController;
+use App\Http\Controllers\Api\WorkProgressController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1');
@@ -19,4 +20,9 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::post('/pkb/{pkb}/force-cancel', [PkbController::class, 'forceCancel']);
     Route::get('/pkb/{pkb}/print', [PkbController::class, 'print']);
     Route::get('/pkb/{pkb}/status-histories', [PkbController::class, 'statusHistories']);
+    Route::post('/pkb/{pkb}/start', [WorkProgressController::class, 'start']);
+    Route::patch('/pkb/{pkb}/spareparts', [WorkProgressController::class, 'updateSpareparts']);
+    Route::post('/pkb/{pkb}/documentations', [WorkProgressController::class, 'uploadDocumentation']);
+    Route::delete('/pkb/{pkb}/documentations', [WorkProgressController::class, 'deleteDocumentation']);
+    Route::post('/pkb/{pkb}/complete', [WorkProgressController::class, 'complete']);
 });

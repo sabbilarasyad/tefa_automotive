@@ -13,6 +13,10 @@ class WebLoginController extends Controller
     public function create(): View|RedirectResponse
     {
         if (Auth::check()) {
+            if (request()->user()->hasPermission('pkb.view_own') && ! request()->user()->hasPermission('pkb.view_all')) {
+                return redirect()->route('mechanic.tasks');
+            }
+
             return redirect()->route('admin.pkb.index');
         }
 
@@ -28,8 +32,12 @@ class WebLoginController extends Controller
         }
 
         $request->session()->regenerate();
+        $user = $request->user();
+        $defaultRoute = $user->hasPermission('pkb.view_own') && ! $user->hasPermission('pkb.view_all')
+            ? route('mechanic.tasks')
+            : route('admin.pkb.index');
 
-        return redirect()->intended(route('admin.pkb.index'));
+        return redirect()->intended($defaultRoute);
     }
 
     public function destroy(): RedirectResponse

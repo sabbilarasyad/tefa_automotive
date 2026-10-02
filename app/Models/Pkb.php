@@ -59,6 +59,11 @@ class Pkb extends Model
         return $this->hasMany(PkbStatusHistory::class);
     }
 
+    public function documentations(): HasMany
+    {
+        return $this->hasMany(Documentation::class);
+    }
+
     public function invoice(): HasOne
     {
         return $this->hasOne(Invoice::class);
