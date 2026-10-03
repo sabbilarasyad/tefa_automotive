@@ -31,13 +31,13 @@
                     @can('create', App\Models\Pkb::class)
                         <a href="{{ route('admin.pkb.create') }}" class="hidden text-sm font-semibold text-[#34433e] hover:text-[#126b56] sm:inline">Servis Baru</a>
                     @endcan
-                    @can('master.manage_spareparts', App\Models\Sparepart::class)
+                    @can('manageSpareparts', App\Models\Sparepart::class)
                         <a href="{{ route('admin.stock.index') }}" class="hidden text-sm font-semibold text-[#34433e] hover:text-[#126b56] lg:inline">Stok</a>
                     @endcan
                     @can('view', App\Models\ServiceHistory::class)
                         <a href="{{ route('admin.service-history.index') }}" class="hidden text-sm font-semibold text-[#34433e] hover:text-[#126b56] lg:inline">Riwayat Servis</a>
                     @endcan
-                    @can('reminder.manage', App\Models\Reminder::class)
+                    @can('manageReminders', App\Models\Reminder::class)
                         <a href="{{ route('admin.reminder.index') }}" class="hidden text-sm font-semibold text-[#34433e] hover:text-[#126b56] lg:inline">Reminder</a>
                     @endcan
                     <span class="hidden text-sm text-[#687671] md:inline">{{ auth()->user()->name }}</span>
