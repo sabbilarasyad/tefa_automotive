@@ -77,7 +77,7 @@ class CashierController extends Controller
         abort_unless($invoice->status === 'PAID', 404);
 
         $pdf = Pdf::loadView('cashier.receipt-pdf', $this->payments->receiptData($invoice))
-            ->setPaper([0, 0, 226.77, 720], 'portrait');
+            ->setPaper('a4', 'portrait');
 
         $downloadName = 'struk-'.str_replace('/', '-', $invoice->number).'.pdf';
 

@@ -102,4 +102,16 @@ class PkbPolicy
     {
         return $user->hasPermission('pkb.validate_complete');
     }
+
+    public function viewChecklist(User $user, Pkb $pkb): bool
+    {
+        return $user->hasPermission('kasir.view_checklist')
+            || $user->hasPermission('kasir.process_payment');
+    }
+
+    public function generateInvoice(User $user, Pkb $pkb): bool
+    {
+        return $user->hasPermission('kasir.process_payment');
+    }
+
 }

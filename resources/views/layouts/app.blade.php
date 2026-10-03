@@ -25,6 +25,9 @@
                     @can('viewProgressList', App\Models\Pkb::class)
                         <a href="{{ route('admin.pkb.progress.index') }}" class="hidden text-sm font-semibold text-[#34433e] hover:text-[#126b56] lg:inline">Progres Pekerjaan</a>
                     @endcan
+                    @can('viewAny', App\Models\Invoice::class)
+                        <a href="{{ route('cashier.index') }}" class="hidden text-sm font-semibold text-[#34433e] hover:text-[#126b56] lg:inline">Kasir</a>
+                    @endcan
                     @can('create', App\Models\Pkb::class)
                         <a href="{{ route('admin.pkb.create') }}" class="hidden text-sm font-semibold text-[#34433e] hover:text-[#126b56] sm:inline">Servis Baru</a>
                     @endcan
