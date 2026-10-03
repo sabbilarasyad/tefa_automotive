@@ -47,6 +47,11 @@
                     <button class="btn-danger text-sm" type="submit">Force-cancel</button>
                 </form>
             @endcan
+            @if (in_array($pkb->status, ['PAID', 'CLOSED']))
+                @can('view', App\Models\ServiceHistory::class)
+                    <a class="btn-secondary text-sm" href="{{ route('admin.service-history.index', ['search' => $pkb->vehicle->plate_number]) }}">Lihat Riwayat Kendaraan Ini</a>
+                @endcan
+            @endif
         </div>
     </div>
 
