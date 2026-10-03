@@ -54,6 +54,6 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function (): v
     Route::get('/service-history', [ServiceHistoryController::class, 'index'])->name('service-history.index');
     Route::get('/service-history/{serviceHistory}', [ServiceHistoryController::class, 'show'])->name('service-history.show');
 
-    Route::get('/reminders', [ReminderController::class, 'index'])->name('reminder.index');
-    Route::post('/reminders/{reminder}/send', [ReminderController::class, 'send'])->name('reminder.send');
+    Route::get('/reminder', [ReminderController::class, 'index'])->name('reminder.index');
+    Route::post('/reminder/{reminder}/send', [ReminderController::class, 'send'])->name('reminder.send');
 });
