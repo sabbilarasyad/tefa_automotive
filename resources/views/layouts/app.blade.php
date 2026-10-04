@@ -31,6 +31,9 @@
                     @can('create', App\Models\Pkb::class)
                         <a href="{{ route('admin.pkb.create') }}" class="hidden text-sm font-semibold text-[#34433e] hover:text-[#126b56] sm:inline">Servis Baru</a>
                     @endcan
+                    @can('manageUsers', App\Models\User::class)
+                        <a href="{{ route('admin.users.index') }}" class="hidden text-sm font-semibold text-[#34433e] hover:text-[#126b56] lg:inline">Pengguna</a>
+                    @endcan
                     @can('manageSpareparts', App\Models\Sparepart::class)
                         <a href="{{ route('admin.stock.index') }}" class="hidden text-sm font-semibold text-[#34433e] hover:text-[#126b56] lg:inline">Stok</a>
                     @endcan

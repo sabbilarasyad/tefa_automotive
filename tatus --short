@@ -1,0 +1,10 @@
+[33mee696d1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m [stok] perbaiki parameter pencarian riwayat tidak terisi otomatis
+[33me732933[m [stok] tambah pintasan riwayat kendaraan dari detail PKB
+[33m8d32b75[m [stok] perbaiki link navbar yang tidak tampil
+[33m548b388[m [stok] perbaiki navigasi, bug 403 superadmin, reminder 404, tambah test Fase 5
+[33m0673786[m [kasir] modul stok, riwayat servis & reminder + perbaikan UI
+[33m55aa9d5[m [kasir] perbaiki struktur assertion test pembayaran soft-block
+[33m1c8a808[m [kasir] modul kasir lengkap: checklist, payment soft-block, struk, whatsapp
+[33mac6afb2[m [progres] modul input progres pekerjaan Admin/Kasir, halaman Tugas & Riwayat mekanik view-only, trigger stok diverifikasi
+[33m433c140[m [pkb] modul inti PKB: create+estimasi+cek stok, assign/reassign, cancel/force-cancel, cetak PKB, trigger status history
+[33m5658ddb[m [auth] setup project, migration 20 tabel, seeder RBAC, auth API sanctum

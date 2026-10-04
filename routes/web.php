@@ -6,6 +6,14 @@ use App\Http\Controllers\Admin\PkbProgressController;
 use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\Admin\ServiceHistoryController;
 use App\Http\Controllers\Admin\ReminderController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\SparepartController;
+use App\Http\Controllers\Public\HomeController;
+use App\Http\Controllers\Public\AboutController;
+use App\Http\Controllers\Public\ServiceController as PublicServiceController;
+use App\Http\Controllers\Public\GalleryController;
+use App\Http\Controllers\Public\ContactController;
 use App\Http\Controllers\Auth\WebLoginController;
 use Illuminate\Support\Facades\Route;
 
@@ -56,4 +64,38 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function (): v
 
     Route::get('/reminder', [ReminderController::class, 'index'])->name('reminder.index');
     Route::post('/reminder/{reminder}/send', [ReminderController::class, 'send'])->name('reminder.send');
+
+    // User Management (Super Admin only)
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::post('/users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
+
+    // Master Data - Services
+    Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
+    Route::get('/services/create', [ServiceController::class, 'create'])->name('services.create');
+    Route::post('/services', [ServiceController::class, 'store'])->name('services.store');
+    Route::get('/services/{service}/edit', [ServiceController::class, 'edit'])->name('services.edit');
+    Route::put('/services/{service}', [ServiceController::class, 'update'])->name('services.update');
+    Route::delete('/services/{service}', [ServiceController::class, 'destroy'])->name('services.destroy');
+
+    // Master Data - Spareparts
+    Route::get('/spareparts', [SparepartController::class, 'index'])->name('spareparts.index');
+    Route::get('/spareparts/create', [SparepartController::class, 'create'])->name('spareparts.create');
+    Route::post('/spareparts', [SparepartController::class, 'store'])->name('spareparts.store');
+    Route::get('/spareparts/{sparepart}/edit', [SparepartController::class, 'edit'])->name('spareparts.edit');
+    Route::put('/spareparts/{sparepart}', [SparepartController::class, 'update'])->name('spareparts.update');
+    Route::delete('/spareparts/{sparepart}', [SparepartController::class, 'destroy'])->name('spareparts.destroy');
 });
+
+// Public Pages (no auth)
+Route::get('/', [HomeController::class, 'index'])->name('public.home');
+Route::get('/tentang', [AboutController::class, 'index'])->name('public.about');
+Route::get('/layanan', [PublicServiceController::class, 'index'])->name('public.services.index');
+Route::get('/layanan/{service}', [PublicServiceController::class, 'show'])->name('public.services.show');
+Route::get('/galeri', [GalleryController::class, 'index'])->name('public.gallery');
+Route::get('/kontak', [ContactController::class, 'index'])->name('public.contact');
+Route::post('/kontak', [ContactController::class, 'store'])->name('public.contact.store');
