@@ -48,7 +48,7 @@
                 </div>
             </nav>
         </header>
-        <main>
+        <main class="pt-0">
             @yield('content')
         </main>
         <footer class="border-t border-[var(--color-border)] bg-[var(--color-white)]">
