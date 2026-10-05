@@ -28,7 +28,7 @@
                     ['icon' => '<svg class="w-10 h-10 mx-auto text-[var(--color-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>', 'title' => 'Proses Cepat', 'desc' => 'Sistem kerja efisien untuk meminimalkan waktu tunggu.'],
                 ] as $feature)
                     <div class="text-center p-6 bg-white rounded-xl border border-[var(--color-border)] hover:shadow-lg transition-shadow">
-                        <div class="mb-3">{{ $feature['icon'] }}</div>
+                        <div class="mb-3">{!! $feature['icon'] !!}</div>
                         <h3 class="text-lg font-semibold text-[var(--color-text)]">{{ $feature['title'] }}</h3>
                         <p class="mt-2 text-sm text-[var(--color-muted)]">{{ $feature['desc'] }}</p>
                     </div>
