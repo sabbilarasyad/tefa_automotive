@@ -37,6 +37,9 @@
                     @can('manageSpareparts', App\Models\Sparepart::class)
                         <a href="{{ route('admin.stock.index') }}" class="hidden text-sm font-semibold text-[#34433e] hover:text-[#126b56] lg:inline">Stok</a>
                     @endcan
+                    @can('manageServices', App\Models\Service::class)
+                        <a href="{{ route('admin.services.index') }}" class="hidden text-sm font-semibold text-[#34433e] hover:text-[#126b56] lg:inline">Jasa</a>
+                    @endcan
                     @can('view', App\Models\ServiceHistory::class)
                         <a href="{{ route('admin.service-history.index') }}" class="hidden text-sm font-semibold text-[#34433e] hover:text-[#126b56] lg:inline">Riwayat Servis</a>
                     @endcan
