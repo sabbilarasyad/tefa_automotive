@@ -74,9 +74,10 @@ class PublicPagesTest extends TestCase
         $this->get(route('public.services.show', $service))
             ->assertOk()
             ->assertSee('Tune Up')
-            ->assertSee('SRV-003')
+            ->assertDontSee('SRV-003')
             ->assertDontSee('Rp300.000')
-            ->assertDontSee('300000');
+            ->assertDontSee('300000')
+            ->assertDontSee('Dokumentasi Foto');
     }
 
     public function test_public_gallery_page_accessible(): void
