@@ -5,12 +5,12 @@
 @section('content')
     <div class="mb-6 flex flex-wrap items-start justify-between gap-4">
         <div>
-            <a class="mb-3 inline-block text-sm font-semibold text-[#126b56]" href="{{ route('admin.services.index') }}">← Daftar Jasa</a>
+            <a class="mb-3 inline-block text-sm font-semibold text-[var(--orange-deep)]" href="{{ route('admin.services.index') }}">← Daftar Jasa</a>
             <h1 class="text-2xl font-bold">Edit Jasa</h1>
         </div>
     </div>
 
-    <section class="border border-[#dce5e1] bg-white p-5 sm:p-6 max-w-2xl">
+    <section class="border border-[var(--line)] bg-white p-5 sm:p-6 max-w-2xl">
         <form method="POST" action="{{ route('admin.services.update', $service) }}" class="space-y-5">
             @csrf
             @method('PUT')
@@ -18,13 +18,13 @@
             <div>
                 <label class="form-label" for="code">Kode Jasa</label>
                 <input class="form-field" id="code" name="code" type="text" value="{{ old('code', $service->code) }}" required maxlength="50" autocomplete="off">
-                @error('code')<p class="mt-1 text-sm text-[#b54039]">{{ $message }}</p>@enderror
+                @error('code')<p class="mt-1 text-sm text-[var(--red)]">{{ $message }}</p>@enderror
             </div>
 
             <div>
                 <label class="form-label" for="name">Nama Jasa</label>
                 <input class="form-field" id="name" name="name" type="text" value="{{ old('name', $service->name) }}" required maxlength="150" autocomplete="off">
-                @error('name')<p class="mt-1 text-sm text-[#b54039]">{{ $message }}</p>@enderror
+                @error('name')<p class="mt-1 text-sm text-[var(--red)]">{{ $message }}</p>@enderror
             </div>
 
             <div>
@@ -35,7 +35,7 @@
             <div>
                 <label class="form-label" for="price">Harga</label>
                 <input class="form-field" id="price" name="price" type="number" step="0.01" min="0" value="{{ old('price', $service->price) }}" required autocomplete="off">
-                @error('price')<p class="mt-1 text-sm text-[#b54039]">{{ $message }}</p>@enderror
+                @error('price')<p class="mt-1 text-sm text-[var(--red)]">{{ $message }}</p>@enderror
             </div>
 
             <div class="flex items-center gap-2">
@@ -48,7 +48,7 @@
                 <label class="form-label cursor-pointer mb-0" for="is_active">Aktif</label>
             </div>
 
-            <div class="flex flex-wrap justify-end gap-3 pt-4 border-t border-[#dce5e1]">
+            <div class="flex flex-wrap justify-end gap-3 pt-4 border-t border-[var(--line)]">
                 <a class="btn-secondary" href="{{ route('admin.services.index') }}">Batal</a>
                 <button class="btn-primary" type="submit">Simpan Perubahan</button>
             </div>

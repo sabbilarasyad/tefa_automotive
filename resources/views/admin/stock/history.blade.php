@@ -5,20 +5,20 @@
 @section('content')
     <div class="mb-6 flex flex-wrap items-start justify-between gap-4">
         <div>
-            <a class="mb-3 inline-block text-sm font-semibold text-[#126b56]" href="{{ route('admin.stock.index') }}">← Daftar Stok</a>
-            <p class="mb-1 text-xs font-bold uppercase tracking-[0.12em] text-[#126b56]">{{ $sparepart->code }}</p>
+            <a class="mb-3 inline-block text-sm font-semibold text-[var(--orange-deep)]" href="{{ route('admin.stock.index') }}">← Daftar Stok</a>
+            <p class="mb-1 text-xs font-bold uppercase tracking-[0.12em] text-[var(--orange-deep)]">{{ $sparepart->code }}</p>
             <h1 class="text-2xl font-bold">Riwayat Pergerakan Stok</h1>
-            <p class="mt-1 text-sm text-[#687671]">{{ $sparepart->name }} · Satuan: {{ $sparepart->unit }} · Stok Saat Ini: {{ number_format((float) $sparepart->stock_qty, 0, ',', '.') }}</p>
+            <p class="mt-1 text-sm text-[var(--muted)]">{{ $sparepart->name }} · Satuan: {{ $sparepart->unit }} · Stok Saat Ini: {{ number_format((float) $sparepart->stock_qty, 0, ',', '.') }}</p>
         </div>
     </div>
 
-    <section class="overflow-hidden border border-[#dce5e1] bg-white">
+    <section class="overflow-hidden border border-[var(--line)] bg-white">
         @if ($movements->isEmpty())
-            <p class="px-5 py-14 text-center text-sm text-[#687671]">Belum ada pergerakan stok untuk sparepart ini.</p>
+            <p class="px-5 py-14 text-center text-sm text-[var(--muted)]">Belum ada pergerakan stok untuk sparepart ini.</p>
         @else
             <div class="overflow-x-auto">
                 <table class="w-full min-w-[800px] text-left text-sm">
-                    <thead class="bg-[#f3f7f5] text-xs uppercase text-[#687671]">
+                    <thead class="bg-[#f3f7f5] text-xs uppercase text-[var(--muted)]">
                         <tr>
                             <th class="px-5 py-3">Tanggal</th>
                             <th class="px-5 py-3">Tipe</th>
@@ -37,10 +37,10 @@
                                 <td class="px-5 py-4">
                                     @php
                                         $typeLabels = [
-                                            'OUT' => ['Keluar', 'bg-[#fff0ed] text-[#9b3d36]'],
-                                            'MANUAL_IN' => ['Masuk Manual', 'bg-[#e6f2ed] text-[#175b49]'],
+                                            'OUT' => ['Keluar', 'bg-[var(--orange-light)] text-[var(--red)]'],
+                                            'MANUAL_IN' => ['Masuk Manual', 'bg-[var(--success)]/10 text-[var(--success)]'],
                                             'ADJUSTMENT' => ['Penyesuaian', 'bg-[#e0e7ff] text-[#3730a3]'],
-                                            'RETURN' => ['Retur', 'bg-[#f3e8ff] text-[#7e22ce]'],
+                                            'RETURN' => ['Retur', 'bg-[var(--orange-light)] text-[var(--orange)]'],
                                         ];
                                         [$label, $badgeClass] = $typeLabels[$movement->type] ?? [$movement->type, 'bg-gray-100 text-gray-600'];
                                     @endphp

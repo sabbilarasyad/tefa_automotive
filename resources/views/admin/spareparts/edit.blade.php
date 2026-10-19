@@ -5,12 +5,12 @@
 @section('content')
     <div class="mb-6 flex flex-wrap items-start justify-between gap-4">
         <div>
-            <a class="mb-3 inline-block text-sm font-semibold text-[#126b56]" href="{{ route('admin.spareparts.index') }}">← Daftar Sparepart</a>
+            <a class="mb-3 inline-block text-sm font-semibold text-[var(--orange-deep)]" href="{{ route('admin.spareparts.index') }}">← Daftar Sparepart</a>
             <h1 class="text-2xl font-bold">Edit Sparepart</h1>
         </div>
     </div>
 
-    <section class="border border-[#dce5e1] bg-white p-5 sm:p-6 max-w-2xl">
+    <section class="border border-[var(--line)] bg-white p-5 sm:p-6 max-w-2xl">
         <form method="POST" action="{{ route('admin.spareparts.update', $sparepart) }}" class="space-y-5">
             @csrf
             @method('PUT')
@@ -18,26 +18,26 @@
             <div>
                 <label class="form-label" for="code">Kode Sparepart</label>
                 <input class="form-field" id="code" name="code" type="text" value="{{ old('code', $sparepart->code) }}" required maxlength="50" autocomplete="off">
-                @error('code')<p class="mt-1 text-sm text-[#b54039]">{{ $message }}</p>@enderror
+                @error('code')<p class="mt-1 text-sm text-[var(--red)]">{{ $message }}</p>@enderror
             </div>
 
             <div>
                 <label class="form-label" for="name">Nama Sparepart</label>
                 <input class="form-field" id="name" name="name" type="text" value="{{ old('name', $sparepart->name) }}" required maxlength="150" autocomplete="off">
-                @error('name')<p class="mt-1 text-sm text-[#b54039]">{{ $message }}</p>@enderror
+                @error('name')<p class="mt-1 text-sm text-[var(--red)]">{{ $message }}</p>@enderror
             </div>
 
             <div>
                 <label class="form-label" for="unit">Satuan</label>
                 <input class="form-field" id="unit" name="unit" type="text" value="{{ old('unit', $sparepart->unit) }}" required maxlength="30" autocomplete="off">
-                @error('unit')<p class="mt-1 text-sm text-[#b54039]">{{ $message }}</p>@enderror
+                @error('unit')<p class="mt-1 text-sm text-[var(--red)]">{{ $message }}</p>@enderror
             </div>
 
             <div class="grid gap-4 sm:grid-cols-2">
                 <div>
                     <label class="form-label" for="selling_price">Harga Jual</label>
                     <input class="form-field" id="selling_price" name="selling_price" type="number" step="0.01" min="0" value="{{ old('selling_price', $sparepart->selling_price) }}" required autocomplete="off">
-                    @error('selling_price')<p class="mt-1 text-sm text-[#b54039]">{{ $message }}</p>@enderror
+                    @error('selling_price')<p class="mt-1 text-sm text-[var(--red)]">{{ $message }}</p>@enderror
                 </div>
                 <div>
                     <label class="form-label" for="cost_price">Harga Pokok (HPP)</label>
@@ -66,7 +66,7 @@
                 <label class="form-label cursor-pointer mb-0" for="is_active">Aktif</label>
             </div>
 
-            <div class="flex flex-wrap justify-end gap-3 pt-4 border-t border-[#dce5e1]">
+            <div class="flex flex-wrap justify-end gap-3 pt-4 border-t border-[var(--line)]">
                 <a class="btn-secondary" href="{{ route('admin.spareparts.index') }}">Batal</a>
                 <button class="btn-primary" type="submit">Simpan Perubahan</button>
             </div>

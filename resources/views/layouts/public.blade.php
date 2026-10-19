@@ -16,16 +16,25 @@
                         <span class="block text-xs text-[var(--muted)]">Bengkel & Layanan Servis</span>
                     </span>
                 </a>
-                <div class="hidden md:flex md:items-center md:gap-6">
-                    <a href="{{ route('public.home') }}" class="text-sm font-medium text-[var(--ink)] hover:text-[var(--orange)] transition-colors">Beranda</a>
-                    <a href="{{ route('public.about') }}" class="text-sm font-medium text-[var(--ink)] hover:text-[var(--orange)] transition-colors">Tentang Kami</a>
-                    <a href="{{ route('public.services.index') }}" class="text-sm font-medium text-[var(--ink)] hover:text-[var(--orange)] transition-colors">Layanan</a>
-                    <a href="{{ route('public.gallery') }}" class="text-sm font-medium text-[var(--ink)] hover:text-[var(--orange)] transition-colors">Galeri</a>
-                    <a href="{{ route('public.contact') }}" class="text-sm font-medium text-[var(--ink)] hover:text-[var(--orange)] transition-colors">Kontak</a>
-                </div>
-                <div class="flex items-center gap-3">
-                    <a href="{{ route('login') }}" class="hidden sm:inline-flex items-center px-4 py-2 text-sm font-medium text-[var(--orange)] hover:text-[var(--orange-deep)]">Masuk</a>
-                    <a href="{{ route('login') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-[var(--orange)] rounded-md hover:bg-[var(--orange-deep)] transition-colors">Login</a>
+
+                <button type="button"
+                        class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-[var(--muted)] hover:text-[var(--ink)] hover:bg-[var(--line)]"
+                        aria-controls="public-menu"
+                        aria-expanded="false"
+                        aria-label="Buka menu navigasi"
+                        id="public-nav-toggle">
+                    <svg class="size-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+
+                <div id="public-menu" class="md:flex md:items-center md:gap-6 flex-col md:flex-row md:items-center md:w-auto w-full md:static absolute md:visible hidden md:bg-transparent bg-white md:shadow-none shadow-lg md:border-none border-t border-[var(--line)] md:py-0 py-4 md:px-0 px-4 md:top-auto top-full left-0 z-30" aria-label="Menu publik">
+                    <a href="{{ route('public.home') }}" class="nav-link-ink">Beranda</a>
+                    <a href="{{ route('public.about') }}" class="nav-link-ink">Tentang Kami</a>
+                    <a href="{{ route('public.services.index') }}" class="nav-link-ink">Layanan</a>
+                    <a href="{{ route('public.gallery') }}" class="nav-link-ink">Galeri</a>
+                    <a href="{{ route('public.contact') }}" class="nav-link-ink">Kontak</a>
+                    <a href="{{ route('login') }}" class="nav-link-ink btn-primary text-center">Login</a>
                 </div>
             </nav>
         </header>
@@ -42,18 +51,17 @@
                     <div>
                         <h4 class="font-semibold text-[var(--ink)]">Layanan</h4>
                         <ul class="mt-2 space-y-1 text-sm text-[var(--muted)]">
-                            <li><a href="{{ route('public.services.index') }}" class="hover:text-[var(--orange)]">Servis Berkala</a></li>
-                            <li><a href="{{ route('public.services.index') }}" class="hover:text-[var(--orange)]">Ganti Oli</a></li>
-                            <li><a href="{{ route('public.services.index') }}" class="hover:text-[var(--orange)]">Perbaikan Mesin</a></li>
-                            <li><a href="{{ route('public.services.index') }}" class="hover:text-[var(--orange)]">Sparepart Original</a></li>
+                            @foreach ($footerServices as $service)
+                                <li><a href="{{ route('public.services.show', $service) }}" class="hover:text-[var(--orange)]">{{ $service->name }}</a></li>
+                            @endforeach
                         </ul>
                     </div>
                     <div>
                         <h4 class="font-semibold text-[var(--ink)]">Kontak</h4>
                         <ul class="mt-2 space-y-1 text-sm text-[var(--muted)]">
-                            <li>Jl. Raya No. 123, Jakarta</li>
-                            <li>Telp: 021-XXXX-XXXX</li>
-                            <li>Email: info@tefa.co.id</li>
+                            <li>{{ config('tefa.address') }}</li>
+                            <li>Telp: {{ config('tefa.phone') }}</li>
+                            <li>Email: {{ config('tefa.email') }}</li>
                         </ul>
                     </div>
                 </div>
@@ -62,5 +70,27 @@
                 </div>
             </div>
         </footer>
-    </body>
-</html>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var toggleButton = document.getElementById('public-nav-toggle');
+                var nav = document.getElementById('public-menu');
+
+                if (toggleButton && nav) {
+                    toggleButton.addEventListener('click', function () {
+                        var isExpanded = toggleButton.getAttribute('aria-expanded') === 'true';
+                        toggleButton.setAttribute('aria-expanded', !isExpanded);
+                        nav.classList.toggle('hidden');
+                        nav.classList.toggle('flex');
+                    });
+                }
+
+                document.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape' && !nav.classList.contains('hidden')) {
+                        nav.classList.add('hidden');
+                        nav.classList.remove('flex');
+                        toggleButton.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            });
+        </script>

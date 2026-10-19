@@ -5,12 +5,12 @@
 @section('content')
     <div class="mb-6 flex flex-wrap items-start justify-between gap-4">
         <div>
-            <a class="mb-3 inline-block text-sm font-semibold text-[#126b56]" href="{{ route('admin.users.index') }}">← Daftar Pengguna</a>
+            <a class="mb-3 inline-block text-sm font-semibold text-[var(--orange-deep)]" href="{{ route('admin.users.index') }}">← Daftar Pengguna</a>
             <h1 class="text-2xl font-bold">Edit Pengguna</h1>
         </div>
     </div>
 
-    <section class="border border-[#dce5e1] bg-white p-5 sm:p-6 max-w-2xl">
+    <section class="border border-[var(--line)] bg-white p-5 sm:p-6 max-w-2xl">
         <form method="POST" action="{{ route('admin.users.update', $user) }}" class="space-y-5">
             @csrf
             @method('PUT')
@@ -18,25 +18,25 @@
             <div>
                 <label class="form-label" for="name">Nama Lengkap</label>
                 <input class="form-field" id="name" name="name" type="text" value="{{ old('name', $user->name) }}" required maxlength="150" autocomplete="name">
-                @error('name')<p class="mt-1 text-sm text-[#b54039]">{{ $message }}</p>@enderror
+                @error('name')<p class="mt-1 text-sm text-[var(--red)]">{{ $message }}</p>@enderror
             </div>
 
             <div>
                 <label class="form-label" for="username">Username</label>
                 <input class="form-field" id="username" name="username" type="text" value="{{ old('username', $user->username) }}" required maxlength="50" autocomplete="username">
-                @error('username')<p class="mt-1 text-sm text-[#b54039]">{{ $message }}</p>@enderror
+                @error('username')<p class="mt-1 text-sm text-[var(--red)]">{{ $message }}</p>@enderror
             </div>
 
             <div>
                 <label class="form-label" for="email">Email</label>
                 <input class="form-field" id="email" name="email" type="email" value="{{ old('email', $user->email) }}" required maxlength="150" autocomplete="email">
-                @error('email')<p class="mt-1 text-sm text-[#b54039]">{{ $message }}</p>@enderror
+                @error('email')<p class="mt-1 text-sm text-[var(--red)]">{{ $message }}</p>@enderror
             </div>
 
             <div>
-                <label class="form-label" for="password">Password Baru <span class="text-[#687671] text-sm">(kosongkan jika tidak diubah)</span></label>
+                <label class="form-label" for="password">Password Baru <span class="text-[var(--muted)] text-sm">(kosongkan jika tidak diubah)</span></label>
                 <input class="form-field" id="password" name="password" type="password" minlength="8" autocomplete="new-password">
-                @error('password')<p class="mt-1 text-sm text-[#b54039]">{{ $message }}</p>@enderror
+                @error('password')<p class="mt-1 text-sm text-[var(--red)]">{{ $message }}</p>@enderror
             </div>
 
             <div>
@@ -52,7 +52,7 @@
                         <option value="{{ $role->id }}" {{ old('role_id', $user->role_id) == $role->id ? 'selected' : '' }}>{{ $role->name }}</option>
                     @endforeach
                 </select>
-                @error('role_id')<p class="mt-1 text-sm text-[#b54039]">{{ $message }}</p>@enderror
+                @error('role_id')<p class="mt-1 text-sm text-[var(--red)]">{{ $message }}</p>@enderror
             </div>
 
             <div class="flex items-center gap-2">
@@ -60,7 +60,7 @@
                 <label class="form-label cursor-pointer mb-0" for="is_active">Aktif</label>
             </div>
 
-            <div class="flex flex-wrap justify-end gap-3 pt-4 border-t border-[#dce5e1]">
+            <div class="flex flex-wrap justify-end gap-3 pt-4 border-t border-[var(--line)]">
                 <a class="btn-secondary" href="{{ route('admin.users.index') }}">Batal</a>
                 <button class="btn-primary" type="submit">Simpan Perubahan</button>
             </div>

@@ -13,6 +13,7 @@ use App\Policies\ServicePolicy;
 use App\Policies\SparepartPolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -35,6 +36,14 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(ServiceHistory::class, ServiceHistoryPolicy::class);
         Gate::policy(User::class, UserPolicy::class);
         Gate::policy(Service::class, ServicePolicy::class);
+
+        View::composer('layouts.public', function ($view) {
+            $view->with('footerServices', Service::query()
+                ->where('is_active', true)
+                ->orderBy('name')
+                ->limit(4)
+                ->get());
+        });
 
         $this->app->rebinding('request', function ($app): void {
             if ($app->resolved('auth')) {

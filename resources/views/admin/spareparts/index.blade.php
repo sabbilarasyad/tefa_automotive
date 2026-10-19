@@ -5,14 +5,14 @@
 @section('content')
     <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
-            <p class="mb-1 text-xs font-bold uppercase tracking-[0.12em] text-[#126b56]">Master Data · Sparepart</p>
+            <p class="mb-1 text-xs font-bold uppercase tracking-[0.12em] text-[var(--orange-deep)]">Master Data · Sparepart</p>
             <h1 class="text-2xl font-bold">Daftar Sparepart</h1>
         </div>
         <a class="btn-primary" href="{{ route('admin.spareparts.create') }}">Tambah Sparepart</a>
     </div>
 
     <!-- Search & Filter -->
-    <section class="mb-5 border border-[#dce5e1] bg-white p-5 sm:p-6">
+    <section class="mb-5 border border-[var(--line)] bg-white p-5 sm:p-6">
         <form method="GET" action="{{ route('admin.spareparts.index') }}" class="flex flex-wrap items-end gap-4">
             <div class="flex-1 min-w-[280px]">
                 <label class="form-label" for="search">Cari (Nama / Kode)</label>
@@ -33,13 +33,13 @@
         </form>
     </section>
 
-    <section class="overflow-hidden border border-[#dce5e1] bg-white">
+    <section class="overflow-hidden border border-[var(--line)] bg-white">
         @if ($spareparts->isEmpty())
-            <p class="px-5 py-14 text-center text-sm text-[#687671]">Belum ada sparepart.</p>
+            <p class="px-5 py-14 text-center text-sm text-[var(--muted)]">Belum ada sparepart.</p>
         @else
             <div class="overflow-x-auto">
                 <table class="w-full min-w-[800px] text-left text-sm">
-                    <thead class="bg-[#f3f7f5] text-xs uppercase text-[#687671]">
+                    <thead class="bg-[#f3f7f5] text-xs uppercase text-[var(--muted)]">
                         <tr>
                             <th class="px-5 py-3">Kode / Nama</th>
                             <th class="px-5 py-3">Satuan</th>
@@ -55,31 +55,31 @@
                             <tr class="hover:bg-[#f9fbfa]">
                                 <td class="px-5 py-4">
                                     <p class="font-semibold">{{ $sparepart->code }}</p>
-                                    <p class="text-xs text-[#687671]">{{ $sparepart->name }}</p>
+                                    <p class="text-xs text-[var(--muted)]">{{ $sparepart->name }}</p>
                                 </td>
                                 <td class="px-5 py-4">{{ $sparepart->unit }}</td>
                                 <td class="px-5 py-4 text-right">
                                     <p>Rp{{ number_format((float) $sparepart->selling_price, 0, ',', '.') }}</p>
-                                    <p class="text-xs text-[#687671]">HPP: Rp{{ number_format((float) $sparepart->cost_price, 0, ',', '.') }}</p>
+                                    <p class="text-xs text-[var(--muted)]">HPP: Rp{{ number_format((float) $sparepart->cost_price, 0, ',', '.') }}</p>
                                 </td>
                                 <td class="px-5 py-4 text-right font-mono">
                                     {{ number_format((float) $sparepart->stock_qty, 0, ',', '.') }} / {{ number_format((float) $sparepart->min_stock, 0, ',', '.') }}
                                 </td>
                                 <td class="px-5 py-4 text-center">
                                     @if ($sparepart->documentation_required)
-                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-[#fff0ed] px-2.5 py-1 text-xs font-semibold text-[#9b3d36]">Ya</span>
+                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-[var(--orange-light)] px-2.5 py-1 text-xs font-semibold text-[var(--red)]">Ya</span>
                                     @else
-                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-[#e6f2ed] px-2.5 py-1 text-xs font-semibold text-[#175b49]">Tidak</span>
+                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-[var(--success)]/10 px-2.5 py-1 text-xs font-semibold text-[var(--success)]">Tidak</span>
                                     @endif
                                 </td>
                                 <td class="px-5 py-4">
                                     @if ($sparepart->is_active)
-                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-[#e6f2ed] px-2.5 py-1 text-xs font-semibold text-[#175b49]">
-                                            <span class="size-1.5 rounded-full bg-[#126b56]"></span> Aktif
+                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-[var(--success)]/10 px-2.5 py-1 text-xs font-semibold text-[var(--success)]">
+                                            <span class="size-1.5 rounded-full bg-[var(--orange)]"></span> Aktif
                                         </span>
                                     @else
-                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-[#fff0ed] px-2.5 py-1 text-xs font-semibold text-[#9b3d36]">
-                                            <span class="size-1.5 rounded-full bg-[#b54039]"></span> Nonaktif
+<span class="inline-flex items-center gap-1.5 rounded-full bg-[var(--orange-light)] px-2.5 py-1 text-xs font-semibold text-[var(--red)]">
+                                            <span class="size-1.5 rounded-full bg-[var(--red)]"></span> Nonaktif
                                         </span>
                                     @endif
                                 </td>
@@ -96,7 +96,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="border-t border-[#dce5e1] px-5 py-4">{{ $spareparts->links() }}</div>
+            <div class="border-t border-[var(--line)] px-5 py-4">{{ $spareparts->links() }}</div>
         @endif
     </section>
 @endsection

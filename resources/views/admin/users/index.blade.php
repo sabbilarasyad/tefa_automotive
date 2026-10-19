@@ -5,14 +5,14 @@
 @section('content')
     <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
-            <p class="mb-1 text-xs font-bold uppercase tracking-[0.12em] text-[#126b56]">Administrasi · Pengguna</p>
+            <p class="mb-1 text-xs font-bold uppercase tracking-[0.12em] text-[var(--orange-deep)]">Administrasi · Pengguna</p>
             <h1 class="text-2xl font-bold">Daftar Pengguna</h1>
         </div>
         <a class="btn-primary" href="{{ route('admin.users.create') }}">Tambah Pengguna</a>
     </div>
 
     <!-- Search -->
-    <section class="mb-5 border border-[#dce5e1] bg-white p-5 sm:p-6">
+    <section class="mb-5 border border-[var(--line)] bg-white p-5 sm:p-6">
         <form method="GET" action="{{ route('admin.users.index') }}" class="flex flex-wrap items-end gap-4">
             <div class="flex-1 min-w-[280px]">
                 <label class="form-label" for="search">Cari (Nama / Username / Email)</label>
@@ -25,13 +25,13 @@
         </form>
     </section>
 
-    <section class="overflow-hidden border border-[#dce5e1] bg-white">
+    <section class="overflow-hidden border border-[var(--line)] bg-white">
         @if ($users->isEmpty())
-            <p class="px-5 py-14 text-center text-sm text-[#687671]">Belum ada pengguna.</p>
+            <p class="px-5 py-14 text-center text-sm text-[var(--muted)]">Belum ada pengguna.</p>
         @else
             <div class="overflow-x-auto">
                 <table class="w-full min-w-[800px] text-left text-sm">
-                    <thead class="bg-[#f3f7f5] text-xs uppercase text-[#687671]">
+                    <thead class="bg-[#f3f7f5] text-xs uppercase text-[var(--muted)]">
                         <tr>
                             <th class="px-5 py-3">Nama / Username</th>
                             <th class="px-5 py-3">Email</th>
@@ -45,28 +45,28 @@
                             <tr class="hover:bg-[#f9fbfa]">
                                 <td class="px-5 py-4">
                                     <p class="font-semibold">{{ $user->name }}</p>
-                                    <p class="text-xs text-[#687671]">{{ $user->username }}</p>
+                                    <p class="text-xs text-[var(--muted)]">{{ $user->username }}</p>
                                 </td>
                                 <td class="px-5 py-4">{{ $user->email }}</td>
                                 <td class="px-5 py-4">
                                     <span class="rounded-full px-2.5 py-1 text-xs font-semibold
-                                        @if ($user->role->name === 'SUPER_ADMIN') bg-[#f3e8ff] text-[#7e22ce]
+                                        @if ($user->role->name === 'SUPER_ADMIN') bg-[var(--orange-light)] text-[var(--orange)]
                                         @elseif ($user->role->name === 'HEAD_TEFA') bg-[#e0e7ff] text-[#3730a3]
-                                        @elseif ($user->role->name === 'ADMIN_CS') bg-[#e6f2ed] text-[#175b49]
-                                        @elseif ($user->role->name === 'MEKANIK') bg-[#fff2d9] text-[#8a5513]
-                                        @else bg-[#fff0ed] text-[#9b3d36] @endif
+                                        @elseif ($user->role->name === 'ADMIN_CS') bg-[var(--success)]/10 text-[var(--success)]
+                                        @elseif ($user->role->name === 'MEKANIK') bg-[var(--orange-light)] text-[var(--orange)]
+                                        @else bg-[var(--orange-light)] text-[var(--red)] @endif
                                     ">
                                         {{ $user->role->name }}
                                     </span>
                                 </td>
                                 <td class="px-5 py-4">
                                     @if ($user->is_active)
-                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-[#e6f2ed] px-2.5 py-1 text-xs font-semibold text-[#175b49]">
-                                            <span class="size-1.5 rounded-full bg-[#126b56]"></span> Aktif
+                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-[var(--success)]/10 px-2.5 py-1 text-xs font-semibold text-[var(--success)]">
+                                            <span class="size-1.5 rounded-full bg-[var(--orange)]"></span> Aktif
                                         </span>
                                     @else
-                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-[#fff0ed] px-2.5 py-1 text-xs font-semibold text-[#9b3d36]">
-                                            <span class="size-1.5 rounded-full bg-[#b54039]"></span> Nonaktif
+<span class="inline-flex items-center gap-1.5 rounded-full bg-[var(--orange-light)] px-2.5 py-1 text-xs font-semibold text-[var(--red)]">
+                                            <span class="size-1.5 rounded-full bg-[var(--red)]"></span> Nonaktif
                                         </span>
                                     @endif
                                 </td>
@@ -92,7 +92,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="border-t border-[#dce5e1] px-5 py-4">{{ $users->links() }}</div>
+            <div class="border-t border-[var(--line)] px-5 py-4">{{ $users->links() }}</div>
         @endif
     </section>
 @endsection
