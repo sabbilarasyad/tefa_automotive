@@ -3,11 +3,13 @@
 namespace App\Providers;
 
 use App\Models\Reminder;
+use App\Models\Report;
 use App\Models\Service;
 use App\Models\ServiceHistory;
 use App\Models\Sparepart;
 use App\Models\User;
 use App\Policies\ReminderPolicy;
+use App\Policies\ReportPolicy;
 use App\Policies\ServiceHistoryPolicy;
 use App\Policies\ServicePolicy;
 use App\Policies\SparepartPolicy;
@@ -36,6 +38,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(ServiceHistory::class, ServiceHistoryPolicy::class);
         Gate::policy(User::class, UserPolicy::class);
         Gate::policy(Service::class, ServicePolicy::class);
+        Gate::policy(Report::class, ReportPolicy::class);
 
         View::composer('layouts.public', function ($view) {
             $view->with('footerServices', Service::query()

@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ReminderController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\SparepartController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Public\AboutController;
 use App\Http\Controllers\Public\ServiceController as PublicServiceController;
@@ -89,6 +90,21 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function (): v
     Route::get('/spareparts/{sparepart}/edit', [SparepartController::class, 'edit'])->name('spareparts.edit');
     Route::put('/spareparts/{sparepart}', [SparepartController::class, 'update'])->name('spareparts.update');
     Route::delete('/spareparts/{sparepart}', [SparepartController::class, 'destroy'])->name('spareparts.destroy');
+
+    // Reports
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/daily', [ReportController::class, 'daily'])->name('reports.daily');
+    Route::get('/reports/daily/export', [ReportController::class, 'dailyExport'])->name('reports.daily.export');
+    Route::get('/reports/monthly', [ReportController::class, 'monthly'])->name('reports.monthly');
+    Route::get('/reports/monthly/export', [ReportController::class, 'monthlyExport'])->name('reports.monthly.export');
+    Route::get('/reports/stock', [ReportController::class, 'stock'])->name('reports.stock');
+    Route::get('/reports/stock/export', [ReportController::class, 'stockExport'])->name('reports.stock.export');
+    Route::get('/reports/documentation', [ReportController::class, 'documentation'])->name('reports.documentation');
+    Route::get('/reports/documentation/export', [ReportController::class, 'documentationExport'])->name('reports.documentation.export');
+    Route::get('/reports/incomplete-payments', [ReportController::class, 'incompletePayments'])->name('reports.incomplete-payments');
+    Route::get('/reports/incomplete-payments/export', [ReportController::class, 'incompletePaymentsExport'])->name('reports.incomplete-payments.export');
+    Route::get('/reports/reminder', [ReportController::class, 'reminder'])->name('reports.reminder');
+    Route::get('/reports/reminder/export', [ReportController::class, 'reminderExport'])->name('reports.reminder.export');
 });
 
 // Public Pages (no auth)

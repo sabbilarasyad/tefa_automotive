@@ -60,6 +60,9 @@
                         if (auth()->user()->can('manageReminders', App\Models\Reminder::class)) {
                             $adminLinks[] = ['route' => route('admin.reminder.index'), 'text' => 'Reminder'];
                         }
+                        if (auth()->user()->can('view', App\Models\Report::class)) {
+                            $adminLinks[] = ['route' => route('admin.reports.index'), 'text' => 'Laporan'];
+                        }
                     @endphp
                     @foreach ($adminLinks as $link)
                         <a href="{{ $link['route'] }}" class="nav-link">{{ $link['text'] }}</a>
