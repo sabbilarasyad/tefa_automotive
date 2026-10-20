@@ -15,6 +15,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Always create roles and permissions first
+        $this->call(\Database\Seeders\TefaAccessSeeder::class);
+
         if (App::environment('production')) {
             $this->call(ProductionSeeder::class);
         } else {

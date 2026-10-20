@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
+use App\Support\AdminPasswordRule;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -78,39 +79,18 @@ class ProductionSeeder extends Seeder
             $roles[$roleName]->permissions()->sync($permissions->only($codes)->pluck('id')->all());
         }
 
-        // Create SUPER_ADMIN from config or prompt
-        $username = config('app.admin_username', env('ADMIN_USERNAME'));
-        $password = config('app.admin_password', env('ADMIN_PASSWORD'));
+        // Get admin credentials from config
+        $username = config('tefa.admin.username');
+        $password = config('tefa.admin.password');
 
-        if ($this->command && ($username === null || $password === null)) {
-            $username = $this->command->ask('SUPER_ADMIN username', 'superadmin');
-            $password = $this->command->secret('SUPER_ADMIN password');
-        }
-
-        // In testing environment, use default password 'password' for all demo users
-        // Override any invalid password from config/env
-        if (app()->environment('testing')) {
-            $password = 'password';
+        // Validate password using AdminPasswordRule (only in production)
+        if (!app()->environment('testing')) {
+            AdminPasswordRule::check($password);
         }
 
         if ($username === null || $password === null) {
             $this->command?->error('ADMIN_USERNAME dan ADMIN_PASSWORD harus diisi di .env atau diinput interaktif.');
             return;
-        }
-
-        // Validate ADMIN_PASSWORD (skip in testing)
-        if (!app()->environment('testing')) {
-            if (strlen($password) < 12) {
-                $this->command?->error('ADMIN_PASSWORD minimal 12 karakter.');
-                $this->command?->fail();
-                return;
-            }
-
-            if ($password === 'changeme123') {
-                $this->command?->error('ADMIN_PASSWORD tidak boleh menggunakan nilai default "changeme123". Gunakan password yang kuat dan unik.');
-                $this->command?->fail();
-                return;
-            }
         }
 
         User::updateOrCreate(

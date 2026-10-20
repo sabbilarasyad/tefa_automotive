@@ -27,10 +27,23 @@ class DemoSeeder extends Seeder
             }
         }
 
-        // Call ProductionSeeder first for roles, permissions, SUPER_ADMIN
-        $this->call(ProductionSeeder::class);
+        // Ensure roles and permissions exist (TefaAccessSeeder handles this)
+        // Create demo SUPER_ADMIN for local/testing
+        $superAdminRole = \App\Models\Role::where('name', 'SUPER_ADMIN')->first();
+        if ($superAdminRole) {
+            \App\Models\User::updateOrCreate(
+                ['username' => 'superadmin'],
+                [
+                    'role_id' => $superAdminRole->id,
+                    'name' => 'Super Administrator',
+                    'email' => 'superadmin@tefa.local',
+                    'password' => \Illuminate\Support\Facades\Hash::make('password'),
+                    'is_active' => true,
+                ]
+            );
+        }
 
-        $roles = Role::all()->keyBy('name');
+        $roles = \App\Models\Role::all()->keyBy('name');
 
         // Demo accounts (headtefa, admincs, mekanik, kasir) - always create these
         $demoAccounts = [
@@ -41,13 +54,13 @@ class DemoSeeder extends Seeder
         ];
 
         foreach ($demoAccounts as [$roleName, $username, $name]) {
-            User::updateOrCreate(
+            \App\Models\User::updateOrCreate(
                 ['username' => $username],
                 [
                     'role_id' => $roles[$roleName]->id,
                     'name' => $name,
                     'email' => $username . '@tefa.local',
-                    'password' => Hash::make('password'),
+                    'password' => \Illuminate\Support\Facades\Hash::make('password'),
                     'is_active' => true,
                 ]
             );
