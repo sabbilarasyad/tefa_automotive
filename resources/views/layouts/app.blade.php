@@ -28,7 +28,7 @@
                     </svg>
                 </button>
 
-                <nav id="main-nav" class="flex flex-col xl:flex-row xl:items-center xl:gap-2 sm:gap-5 w-full xl:w-auto xl:bg-transparent bg-white xl:shadow-none shadow-lg xl:border-none border-t border-[var(--line)] xl:py-0 py-4 xl:px-0 px-4 xl:static absolute xl:visible hidden xl:bg-transparent xl:top-auto top-full left-0 z-30" aria-label="Menu utama">
+                <nav id="main-nav" class="hidden flex-col w-full bg-white shadow-lg border-t border-[var(--line)] py-4 px-4 top-full left-0 z-30 xl:flex xl:flex-row xl:items-center xl:gap-2 xl:w-auto xl:bg-transparent xl:shadow-none xl:border-none xl:py-0 xl:px-0 xl:static xl:top-auto" aria-label="Menu utama">
                     @php
                         $adminLinks = [];
                         if (auth()->user()->hasPermission('pkb.view_own') && ! auth()->user()->hasPermission('pkb.view_all')) {
