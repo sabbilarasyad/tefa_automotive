@@ -17,6 +17,11 @@ class ContactController extends Controller
 
     public function store(ContactRequest $request): RedirectResponse
     {
+        // Honeypot check - if filled, silently ignore (don't store, but return success)
+        if ($request->filled('website')) {
+            return back()->with('success', 'Pesan Anda telah terkirim. Kami akan menghubungi Anda segera.');
+        }
+
         ContactMessage::create($request->validated());
 
         return back()->with('success', 'Pesan Anda telah terkirim. Kami akan menghubungi Anda segera.');

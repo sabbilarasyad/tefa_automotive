@@ -29,7 +29,7 @@
                 </button>
 
                 <nav id="main-nav" class="hidden flex-col w-full bg-white shadow-lg border-t border-[var(--line)] py-4 px-4 top-full left-0 z-30 xl:flex xl:flex-row xl:items-center xl:gap-2 xl:w-auto xl:bg-transparent xl:shadow-none xl:border-none xl:py-0 xl:px-0 xl:static xl:top-auto" aria-label="Menu utama">
-                    @php
+@php
                         $adminLinks = [];
                         if (auth()->user()->hasPermission('pkb.view_own') && ! auth()->user()->hasPermission('pkb.view_all')) {
                             $adminLinks[] = ['route' => route('mechanic.tasks'), 'text' => 'Tugas & Riwayat Saya'];
@@ -63,9 +63,22 @@
                         if (auth()->user()->can('view', App\Models\Report::class)) {
                             $adminLinks[] = ['route' => route('admin.reports.index'), 'text' => 'Laporan'];
                         }
+                        // Contact Messages link with unread badge
+                        if (auth()->user()->can('manageContactMessages', App\Models\ContactMessage::class)) {
+                            $unreadCount = App\Models\ContactMessage::whereNull('read_at')->count();
+                            $label = 'Pesan';
+                            if ($unreadCount > 0) {
+                                $label .= ' <span class="ml-1 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-medium leading-none text-white transform rounded-full bg-[var(--orange)]">' . ($unreadCount > 9 ? '9+' : $unreadCount) . '</span>';
+                            }
+                            $adminLinks[] = ['route' => route('admin.contact-messages.index'), 'text' => $label, 'raw' => true];
+                        }
                     @endphp
                     @foreach ($adminLinks as $link)
-                        <a href="{{ $link['route'] }}" class="nav-link">{{ $link['text'] }}</a>
+                        @if (!empty($link['raw']))
+                            <a href="{{ $link['route'] }}" class="nav-link">{!! $link['text'] !!}</a>
+                        @else
+                            <a href="{{ $link['route'] }}" class="nav-link">{{ $link['text'] }}</a>
+                        @endif
                     @endforeach
                     <span class="xl:inline-block hidden px-3 py-2 text-sm text-[var(--muted)]">{{ auth()->user()->name }}</span>
                     <form method="POST" action="{{ route('admin.logout') }}" class="xl:inline w-full xl:w-auto">

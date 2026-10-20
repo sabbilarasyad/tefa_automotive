@@ -61,6 +61,7 @@ class AuthApiTest extends TestCase
                 'kasir.view_checklist', 'kasir.process_payment', 'kasir.print_invoice',
                 'master.manage_services', 'master.manage_spareparts', 'master.adjust_stock',
                 'user.manage', 'user.reset_password', 'report.view', 'reminder.manage', 'activity_log.view',
+                'contact_message.manage',
             ],
             'headtefa' => ['pkb.view_all', 'report.view'],
             'admincs' => [
@@ -68,6 +69,7 @@ class AuthApiTest extends TestCase
                 'pkb.start_work', 'pkb.update_work_progress', 'pkb.upload_documentation',
                 'pkb.delete_documentation', 'pkb.validate_complete', 'master.manage_services',
                 'master.manage_spareparts', 'master.adjust_stock', 'report.view', 'reminder.manage',
+                'contact_message.manage',
             ],
             'mekanik' => ['pkb.view_own'],
             'kasir' => [

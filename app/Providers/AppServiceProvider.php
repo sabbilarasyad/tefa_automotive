@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\DB;
 use App\Models\Reminder;
 use App\Models\Report;
 use App\Models\Service;
@@ -33,6 +34,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        DB::prohibitDestructiveCommands(
+    config('database.connections.mysql.database') === 'tefa_automotive'
+        );
         Gate::policy(Sparepart::class, SparepartPolicy::class);
         Gate::policy(Reminder::class, ReminderPolicy::class);
         Gate::policy(ServiceHistory::class, ServiceHistoryPolicy::class);

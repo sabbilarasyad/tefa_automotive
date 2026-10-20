@@ -45,6 +45,7 @@ class TefaAccessSeeder extends Seeder
             'report.view' => 'Melihat laporan',
             'reminder.manage' => 'Mengelola reminder',
             'activity_log.view' => 'Melihat audit log',
+            'contact_message.manage' => 'Mengelola pesan kontak',
         ];
 
         $permissions = collect($permissionNames)->mapWithKeys(fn (string $name, string $code) => [
@@ -62,6 +63,7 @@ class TefaAccessSeeder extends Seeder
                 'pkb.start_work', 'pkb.update_work_progress', 'pkb.upload_documentation',
                 'pkb.delete_documentation', 'pkb.validate_complete', 'master.manage_services',
                 'master.manage_spareparts', 'master.adjust_stock', 'report.view', 'reminder.manage',
+                'contact_message.manage',
             ],
             'MEKANIK' => ['pkb.view_own'],
             'KASIR' => [

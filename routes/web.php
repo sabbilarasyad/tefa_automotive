@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\SparepartController;
 use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Public\AboutController;
 use App\Http\Controllers\Public\ServiceController as PublicServiceController;
@@ -101,6 +102,12 @@ Route::middleware(['auth', 'active'])->prefix('admin')->name('admin.')->group(fu
     Route::get('/reports/incomplete-payments/export', [ReportController::class, 'incompletePaymentsExport'])->name('reports.incomplete-payments.export');
     Route::get('/reports/reminder', [ReportController::class, 'reminder'])->name('reports.reminder');
     Route::get('/reports/reminder/export', [ReportController::class, 'reminderExport'])->name('reports.reminder.export');
+    
+    // Contact Messages
+    Route::get('/contact-messages', [ContactMessageController::class, 'index'])->name('contact-messages.index');
+    Route::put('/contact-messages/{contactMessage}/mark-read', [ContactMessageController::class, 'markAsRead'])->name('contact-messages.mark-read');
+    Route::put('/contact-messages/{contactMessage}/mark-unread', [ContactMessageController::class, 'markAsUnread'])->name('contact-messages.mark-unread');
+    Route::delete('/contact-messages/{contactMessage}', [ContactMessageController::class, 'destroy'])->name('contact-messages.destroy');
 });
 
 // Public Pages (no auth)

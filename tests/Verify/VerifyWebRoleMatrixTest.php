@@ -76,6 +76,11 @@ class VerifyWebRoleMatrixTest extends TestCase
         
         ['GET', 'admin.reminder.index', 'reminder.manage', 'Reminder Index', []],
         ['POST', 'admin.reminder.send', 'reminder.manage', 'Reminder Send', ['reminder' => 1]],
+        
+        ['GET', 'admin.contact-messages.index', 'contact_message.manage', 'Contact Messages Index', []],
+        ['PUT', 'admin.contact-messages.mark-read', 'contact_message.manage', 'Contact Message Mark Read', ['contactMessage' => 1]],
+        ['PUT', 'admin.contact-messages.mark-unread', 'contact_message.manage', 'Contact Message Mark Unread', ['contactMessage' => 1]],
+        ['DELETE', 'admin.contact-messages.destroy', 'contact_message.manage', 'Contact Message Destroy', ['contactMessage' => 1]],
     ];
 
     public function test_web_role_matrix(): void
@@ -167,6 +172,9 @@ class VerifyWebRoleMatrixTest extends TestCase
                     'vehicle_id' => $vehicle->id,
                     'reminder_date' => now()->toDateString(),
                 ]);
+                
+                // Create fresh contact message for each role iteration
+                $contactMessage = \App\Models\ContactMessage::factory()->create();
 
                 // Build route parameters
                 $routeParams = [];
@@ -189,6 +197,8 @@ class VerifyWebRoleMatrixTest extends TestCase
                         $routeParams[$key] = $pkb->id;
                     } elseif ($key === 'reminder') {
                         $routeParams[$key] = $reminder->id;
+                    } elseif ($key === 'contactMessage') {
+                        $routeParams[$key] = $contactMessage->id;
                     }
                 }
 
@@ -198,6 +208,11 @@ class VerifyWebRoleMatrixTest extends TestCase
                 // Exceptions: pkb.show allows access via pkb.view_all (HEAD_TEFA) or progress permissions (KASIR)
                 if ($routeName === 'admin.pkb.show') {
                     $hasPermission = $hasPermission || $user->hasPermission('pkb.view_all') || $user->hasPermission('pkb.start_work');
+                }
+                
+                // Exception: contact message destroy only for SUPER_ADMIN (hapus hanya SUPER_ADMIN)
+                if ($routeName === 'admin.contact-messages.destroy' && $method === 'DELETE') {
+                    $hasPermission = $user->hasRole('SUPER_ADMIN');
                 }
                 
                 $response = $this->actingAs($user)

@@ -541,4 +541,76 @@ class VerifyApiTest extends TestCase
         $duplicates = array_diff_assoc($routes, array_unique($routes));
         $this->assertEmpty($duplicates, 'Duplicate API routes found: ' . implode(', ', $duplicates));
     }
+
+    /** @test */
+    public function test_403_error_page_renders_custom_view(): void
+    {
+        $this->seed();
+        $mekanik = User::where('username', 'mekanik')->firstOrFail();
+
+        $response = $this->actingAs($mekanik)
+            ->get(route('admin.services.index'))
+            ->assertForbidden();
+
+        $response->assertSee('Akses Ditolak')
+            ->assertSee('403')
+            ->assertDontSee('Stack trace')
+            ->assertDontSee('at ')
+            ->assertDontSee('File:');
+    }
+
+    /** @test */
+    public function test_404_error_page_renders_custom_view(): void
+    {
+        $this->seed();
+        $superAdmin = User::where('username', 'superadmin')->firstOrFail();
+
+        $response = $this->actingAs($superAdmin)
+            ->get('/admin/non-existent-route')
+            ->assertNotFound();
+
+        $response->assertSee('Halaman Tidak Ditemukan')
+            ->assertSee('404')
+            ->assertDontSee('Stack trace')
+            ->assertDontSee('at ')
+            ->assertDontSee('File:');
+    }
+
+    /** @test */
+    public function test_403_error_page_api_returns_json_without_stack_trace(): void
+    {
+        $this->seed();
+        $mekanik = User::where('username', 'mekanik')->firstOrFail();
+        $token = $mekanik->createToken('test')->plainTextToken;
+
+        $response = $this->withToken($token)
+            ->getJson('/api/master/services')
+            ->assertForbidden();
+
+        $response->assertJsonStructure([
+            'success',
+            'message',
+        ])
+        ->assertJsonMissing(['trace'])
+        ->assertJsonMissing(['exception']);
+    }
+
+    /** @test */
+    public function test_404_error_page_api_returns_json_without_stack_trace(): void
+    {
+        $this->seed();
+        $superAdmin = User::where('username', 'superadmin')->firstOrFail();
+        $token = $superAdmin->createToken('test')->plainTextToken;
+
+        $response = $this->withToken($token)
+            ->getJson('/api/non-existent-route')
+            ->assertNotFound();
+
+        $response->assertJsonStructure([
+            'success',
+            'message',
+        ])
+        ->assertJsonMissing(['trace'])
+        ->assertJsonMissing(['exception']);
+    }
 }

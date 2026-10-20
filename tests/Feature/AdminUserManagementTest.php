@@ -191,4 +191,35 @@ class AdminUserManagementTest extends TestCase
 
         $response->assertDontSee('Pengguna');
     }
+
+    /** @test */
+    public function test_production_seeder_creates_exactly_one_super_admin_from_env(): void
+    {
+        // This test uses the seeded database
+        $this->seed();
+
+        $superAdmins = User::whereHas('role', fn ($q) => $q->where('name', 'SUPER_ADMIN'))
+            ->where('is_active', true)
+            ->get();
+
+        $this->assertCount(1, $superAdmins);
+        $this->assertEquals('superadmin', $superAdmins->first()->username);
+        $this->assertEquals('superadmin@tefa.local', $superAdmins->first()->email);
+    }
+
+    /** @test */
+    public function test_production_environment_has_no_demo_accounts(): void
+    {
+        config(['app.env' => 'production']);
+        $this->app->instance('config', config());
+
+        // In production, only ProductionSeeder runs
+        $this->artisan('db:seed', ['--class' => 'Database\Seeders\ProductionSeeder']);
+
+        $users = User::whereHas('role', fn ($q) => $q->whereIn('name', ['HEAD_TEFA', 'ADMIN_CS', 'MEKANIK', 'KASIR']))
+            ->where('is_active', true)
+            ->get();
+
+        $this->assertCount(0, $users, 'No demo accounts should exist in production');
+    }
 }

@@ -56,6 +56,27 @@
         </section>
 
         <section class="border border-[var(--line)] bg-white p-5 sm:p-6">
+            <h2 class="mb-4 font-bold">Pesan Baru</h2>
+            @php
+                $unreadCount = \App\Models\ContactMessage::whereNull('read_at')->count();
+                $latestMessage = \App\Models\ContactMessage::latest()->first();
+            @endphp
+            <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-[var(--muted)]">Belum dibaca</span>
+                    <span class="font-bold text-lg">{{ $unreadCount }} {{ $unreadCount > 1 ? 'pesan' : 'pesan' }}</span>
+                </div>
+                @if ($latestMessage)
+                    <a href="{{ route('admin.contact-messages.index') }}" class="btn-secondary text-sm py-2 w-full">
+                        Lihat semua pesan
+                    </a>
+                @else
+                    <p class="text-sm text-[var(--muted)]">Belum ada pesan masuk</p>
+                @endif
+            </div>
+        </section>
+
+        <section class="border border-[var(--line)] bg-white p-5 sm:p-6">
             <h2 class="mb-4 font-bold">PKB per Status</h2>
             <div class="space-y-3">
                 @foreach ($data['pkb_per_status'] as $status => $count)
