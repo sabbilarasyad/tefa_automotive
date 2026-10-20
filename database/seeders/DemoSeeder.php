@@ -32,9 +32,8 @@ class DemoSeeder extends Seeder
 
         $roles = Role::all()->keyBy('name');
 
-        // Demo accounts
+        // Demo accounts (headtefa, admincs, mekanik, kasir) - always create these
         $demoAccounts = [
-            ['SUPER_ADMIN', 'superadmin', 'Super Administrator'],
             ['HEAD_TEFA', 'headtefa', 'Kepala TEFA'],
             ['ADMIN_CS', 'admincs', 'Admin Customer Service'],
             ['MEKANIK', 'mekanik', 'Mekanik Demo'],
@@ -54,10 +53,10 @@ class DemoSeeder extends Seeder
             );
         }
 
-        // In testing environment, create all reference data but skip interactive prompt
+        // In testing environment, skip reference data creation (customers, vehicles, services, spareparts)
         if (app()->environment('testing')) {
             $this->command?->info('Demo accounts seeded successfully (testing mode).');
-            // Continue to create all reference data for tests
+            return;
         }
 
         // Demo customers
