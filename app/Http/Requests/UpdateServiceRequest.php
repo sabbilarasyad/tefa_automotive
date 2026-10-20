@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Service;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -9,7 +10,8 @@ class UpdateServiceRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user() !== null;
+        $service = $this->route('service');
+        return $this->user()?->can('manageServices', $service) ?? false;
     }
 
     public function rules(): array

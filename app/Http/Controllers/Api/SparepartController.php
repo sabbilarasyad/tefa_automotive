@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\SparepartStockAdjustmentRequest;
+use App\Http\Requests\Api\SparepartStockAdjustmentRequest;
+use App\Http\Requests\Api\StoreSparepartRequest;
+use App\Http\Requests\Api\UpdateSparepartRequest;
 use App\Models\Sparepart;
 use App\Services\StockService;
 use Illuminate\Http\JsonResponse;
@@ -14,6 +16,8 @@ class SparepartController extends Controller
 
     public function index(): JsonResponse
     {
+        $this->authorize('manageSpareparts', Sparepart::class);
+
         $query = Sparepart::query()
             ->where('is_active', true)
             ->withCount('stockMovements')
@@ -33,6 +37,8 @@ class SparepartController extends Controller
 
     public function show(Sparepart $sparepart): JsonResponse
     {
+        $this->authorize('manageSpareparts', $sparepart);
+
         return response()->json([
             'success' => true,
             'data' => $sparepart->load('stockMovements.creator'),
@@ -62,6 +68,8 @@ class SparepartController extends Controller
 
     public function masterIndex(): JsonResponse
     {
+        $this->authorize('manageSpareparts', Sparepart::class);
+        
         $spareparts = \App\Models\Sparepart::query()
             ->orderBy('name')
             ->paginate(20);
@@ -72,8 +80,10 @@ class SparepartController extends Controller
         ]);
     }
 
-    public function masterStore(\App\Http\Requests\StoreSparepartRequest $request): JsonResponse
+    public function masterStore(StoreSparepartRequest $request): JsonResponse
     {
+        $this->authorize('manageSpareparts', Sparepart::class);
+        
         $sparepart = \App\Models\Sparepart::create($request->validated());
 
         return response()->json([
@@ -85,14 +95,18 @@ class SparepartController extends Controller
 
     public function masterShow(\App\Models\Sparepart $sparepart): JsonResponse
     {
+        $this->authorize('manageSpareparts', $sparepart);
+
         return response()->json([
             'success' => true,
             'data' => $sparepart,
         ]);
     }
 
-    public function masterUpdate(\App\Http\Requests\UpdateSparepartRequest $request, \App\Models\Sparepart $sparepart): JsonResponse
+    public function masterUpdate(UpdateSparepartRequest $request, \App\Models\Sparepart $sparepart): JsonResponse
     {
+        $this->authorize('manageSpareparts', $sparepart);
+        
         $sparepart->update($request->validated());
 
         return response()->json([
@@ -104,6 +118,8 @@ class SparepartController extends Controller
 
     public function masterDestroy(\App\Models\Sparepart $sparepart): JsonResponse
     {
+        $this->authorize('manageSpareparts', $sparepart);
+        
         $sparepart->delete();
 
         return response()->json([

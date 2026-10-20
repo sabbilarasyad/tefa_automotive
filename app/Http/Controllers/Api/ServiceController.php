@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreServiceRequest;
-use App\Http\Requests\UpdateServiceRequest;
+use App\Http\Requests\Api\StoreServiceRequest;
+use App\Http\Requests\Api\UpdateServiceRequest;
 use App\Models\Service;
 use Illuminate\Http\JsonResponse;
 
@@ -12,6 +12,8 @@ class ServiceController extends Controller
 {
     public function index(): JsonResponse
     {
+        $this->authorize('manageServices', Service::class);
+        
         $query = Service::query()->orderBy('name');
 
         $search = request()->get('search');
@@ -32,6 +34,8 @@ class ServiceController extends Controller
 
     public function store(StoreServiceRequest $request): JsonResponse
     {
+        $this->authorize('manageServices', Service::class);
+        
         $service = Service::create($request->validated());
 
         return response()->json([
@@ -43,6 +47,8 @@ class ServiceController extends Controller
 
     public function show(Service $service): JsonResponse
     {
+        $this->authorize('manageServices', $service);
+
         return response()->json([
             'success' => true,
             'data' => $service,
@@ -51,6 +57,8 @@ class ServiceController extends Controller
 
     public function update(UpdateServiceRequest $request, Service $service): JsonResponse
     {
+        $this->authorize('manageServices', $service);
+        
         $service->update($request->validated());
 
         return response()->json([
@@ -62,6 +70,8 @@ class ServiceController extends Controller
 
     public function destroy(Service $service): JsonResponse
     {
+        $this->authorize('manageServices', $service);
+        
         $service->delete();
 
         return response()->json([

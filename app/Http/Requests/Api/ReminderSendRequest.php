@@ -8,7 +8,7 @@ class ReminderSendRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user() !== null;
+        return $this->user()?->hasPermission('reminder.manage') ?? false;
     }
 
     public function rules(): array

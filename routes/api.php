@@ -15,7 +15,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1');
 
-Route::middleware('auth:sanctum')->group(function (): void {
+// Public endpoint (no auth)
+Route::post('/contact-messages', [ContactController::class, 'store'])->middleware('throttle:10,1');
+
+Route::middleware(['auth:sanctum', 'active'])->group(function (): void {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
 
@@ -45,38 +48,39 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::post('/pkb/{pkb}/complete', [WorkProgressController::class, 'complete']);
 
     // Sparepart routes
-    Route::get('/spareparts', [ApiSparepartController::class, 'index']);
-    Route::get('/spareparts/{sparepart}', [ApiSparepartController::class, 'show']);
-    Route::post('/spareparts/{sparepart}/stock-adjustments', [ApiSparepartController::class, 'stockAdjustment']);
+    Route::get('/spareparts', [SparepartController::class, 'index'])->name('api.spareparts.index');
+    Route::get('/spareparts/{sparepart}', [SparepartController::class, 'show'])->name('api.spareparts.show');
+    Route::post('/spareparts/{sparepart}/stock-adjustments', [SparepartController::class, 'stockAdjustment'])->name('api.spareparts.stock-adjustments');
 
     // Vehicle routes
-    Route::get('/vehicles/{vehicle}/service-histories', [VehicleController::class, 'serviceHistories']);
+    Route::get('/vehicles/{vehicle}/service-histories', [VehicleController::class, 'serviceHistories'])->name('api.vehicles.service-histories');
 
     // Reminder routes
-    Route::get('/reminders', [ReminderController::class, 'index']);
-    Route::post('/reminders/{reminder}/send', [ReminderController::class, 'send']);
+    Route::get('/reminders', [ReminderController::class, 'index'])->name('api.reminders.index');
+    Route::post('/reminders/{reminder}/send', [ReminderController::class, 'send'])->name('api.reminders.send');
 
     // User routes (Super Admin only)
-    Route::get('/users', [UserController::class, 'index']);
-    Route::post('/users', [UserController::class, 'store']);
-    Route::get('/users/{user}', [UserController::class, 'show']);
-    Route::patch('/users/{user}', [UserController::class, 'update']);
-    Route::patch('/users/{user}/reset-password', [UserController::class, 'resetPassword']);
+    Route::get('/users', [UserController::class, 'index'])->name('api.users.index');
+    Route::post('/users', [UserController::class, 'store'])->name('api.users.store');
+    Route::get('/users/{user}', [UserController::class, 'show'])->name('api.users.show');
+    Route::patch('/users/{user}', [UserController::class, 'update'])->name('api.users.update');
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('api.users.destroy');
+    Route::patch('/users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('api.users.reset-password');
 
     // Master Data - Services
-    Route::get('/master/services', [ServiceController::class, 'index']);
-    Route::post('/master/services', [ServiceController::class, 'store']);
-    Route::get('/master/services/{service}', [ServiceController::class, 'show']);
-    Route::patch('/master/services/{service}', [ServiceController::class, 'update']);
-    Route::delete('/master/services/{service}', [ServiceController::class, 'destroy']);
+    Route::get('/master/services', [ServiceController::class, 'index'])->name('api.master.services.index');
+    Route::post('/master/services', [ServiceController::class, 'store'])->name('api.master.services.store');
+    Route::get('/master/services/{service}', [ServiceController::class, 'show'])->name('api.master.services.show');
+    Route::patch('/master/services/{service}', [ServiceController::class, 'update'])->name('api.master.services.update');
+    Route::delete('/master/services/{service}', [ServiceController::class, 'destroy'])->name('api.master.services.destroy');
 
     // Master Data - Spareparts
-    Route::get('/master/spareparts', [ApiSparepartController::class, 'masterIndex']);
-    Route::post('/master/spareparts', [ApiSparepartController::class, 'masterStore']);
-    Route::get('/master/spareparts/{sparepart}', [ApiSparepartController::class, 'masterShow']);
-    Route::patch('/master/spareparts/{sparepart}', [ApiSparepartController::class, 'masterUpdate']);
-    Route::delete('/master/spareparts/{sparepart}', [ApiSparepartController::class, 'masterDestroy']);
+    Route::get('/master/spareparts', [SparepartController::class, 'masterIndex'])->name('api.master.spareparts.index');
+    Route::post('/master/spareparts', [SparepartController::class, 'masterStore'])->name('api.master.spareparts.store');
+    Route::get('/master/spareparts/{sparepart}', [SparepartController::class, 'masterShow'])->name('api.master.spareparts.show');
+    Route::patch('/master/spareparts/{sparepart}', [SparepartController::class, 'masterUpdate'])->name('api.master.spareparts.update');
+    Route::delete('/master/spareparts/{sparepart}', [SparepartController::class, 'masterDestroy'])->name('api.master.spareparts.destroy');
 
-    // Contact form (public, with throttle)
-    Route::post('/contact-messages', [ContactController::class, 'store'])->middleware('throttle:10,1');
+    // Contact form (public, with throttle) - MOVED OUTSIDE auth:sanctum
+    // Route::post('/contact-messages', [ContactController::class, 'store'])->middleware('throttle:10,1');
 });

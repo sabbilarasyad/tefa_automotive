@@ -18,18 +18,14 @@ use App\Http\Controllers\Public\ContactController;
 use App\Http\Controllers\Auth\WebLoginController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::middleware('guest')->group(function (): void {
     Route::get('/login', [WebLoginController::class, 'create'])->name('login');
     Route::post('/login', [WebLoginController::class, 'store'])->name('login.store');
 });
 
-Route::middleware('auth')->get('/mechanic/tasks', [PkbProgressController::class, 'mechanicTasks'])->name('mechanic.tasks');
+Route::middleware(['auth', 'active'])->get('/mechanic/tasks', [PkbProgressController::class, 'mechanicTasks'])->name('mechanic.tasks');
 
-Route::middleware('auth')->prefix('cashier')->name('cashier.')->group(function (): void {
+Route::middleware(['auth', 'active'])->prefix('cashier')->name('cashier.')->group(function (): void {
     Route::get('/', [CashierController::class, 'index'])->name('index');
     Route::get('/invoices/{invoice}', [CashierController::class, 'show'])->name('invoices.show');
     Route::post('/invoices/{invoice}/payments', [CashierController::class, 'processPayment'])->name('invoices.payments.store');
@@ -37,7 +33,7 @@ Route::middleware('auth')->prefix('cashier')->name('cashier.')->group(function (
     Route::get('/invoices/{invoice}/receipt.pdf', [CashierController::class, 'pdf'])->name('invoices.pdf');
 });
 
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function (): void {
+Route::middleware(['auth', 'active'])->prefix('admin')->name('admin.')->group(function (): void {
     Route::post('/logout', [WebLoginController::class, 'destroy'])->name('logout');
     Route::get('/pkb/progress', [PkbProgressController::class, 'index'])->name('pkb.progress.index');
     Route::get('/pkb', [PkbController::class, 'index'])->name('pkb.index');

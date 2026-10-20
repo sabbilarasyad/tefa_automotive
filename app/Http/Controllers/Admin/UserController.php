@@ -85,12 +85,26 @@ class UserController extends Controller
         $this->authorize('manageUsers', $user);
 
         if ($user->id === auth()->id()) {
-            return back()->with('error', 'Tidak bisa menghapus akun sendiri.');
+            return back()->with('error', 'Tidak bisa menonaktifkan akun sendiri.');
         }
 
-        $user->delete();
+        // Check if target is the last active SUPER_ADMIN
+        if ($user->hasRole('SUPER_ADMIN')) {
+            $activeSuperAdmins = User::whereHas('role', fn ($q) => $q->where('name', 'SUPER_ADMIN'))
+                ->where('is_active', true)
+                ->count();
+            if ($activeSuperAdmins <= 1) {
+                return back()->with('error', 'Tidak bisa menonaktifkan SUPER_ADMIN aktif terakhir.');
+            }
+        }
 
-        return redirect()->route('admin.users.index')->with('success', 'Pengguna berhasil dihapus.');
+        // Revoke all Sanctum tokens
+        $user->tokens()->delete();
+
+        // Deactivate instead of delete
+        $user->update(['is_active' => false]);
+
+        return redirect()->route('admin.users.index')->with('success', 'Pengguna berhasil dinonaktifkan.');
     }
 
     public function resetPassword(Request $request, User $user): RedirectResponse

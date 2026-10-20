@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Sparepart;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -9,7 +10,8 @@ class UpdateSparepartRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user() !== null;
+        $sparepart = $this->route('sparepart');
+        return $this->user()?->can('manageSpareparts', $sparepart) ?? false;
     }
 
     public function rules(): array

@@ -9,7 +9,7 @@ class RestockSparepartRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user() !== null;
+        return $this->user()?->hasPermission('master.adjust_stock') ?? false;
     }
 
     public function rules(): array

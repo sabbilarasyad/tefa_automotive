@@ -73,17 +73,6 @@
                         <button type="submit" class="nav-link btn-secondary text-center">Keluar</button>
                     </form>
                 </nav>
-
-                <button type="button"
-                        class="xl:hidden inline-flex items-center justify-center p-2 rounded-md text-[var(--muted)] hover:text-[var(--ink)] hover:bg-[var(--line)]"
-                        aria-controls="main-nav"
-                        aria-expanded="false"
-                        aria-label="Buka menu navigasi"
-                        id="nav-toggle">
-                    <svg class="size-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
             </div>
         </header>
         <main class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">

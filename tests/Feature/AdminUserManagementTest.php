@@ -106,25 +106,27 @@ class AdminUserManagementTest extends TestCase
         $this->assertEquals('Updated Name', $kasir->name);
     }
 
-    public function test_super_admin_can_delete_user(): void
+    public function test_super_admin_can_deactivate_user(): void
     {
         $this->seed();
         $superAdmin = User::where('username', 'superadmin')->firstOrFail();
-        $userToDelete = User::create([
+        $userToDeactivate = User::create([
             'role_id' => Role::where('name', 'KASIR')->first()->id,
-            'name' => 'To Delete',
-            'username' => 'todelete',
-            'email' => 'todelete@tefa.local',
+            'name' => 'To Deactivate',
+            'username' => 'todeactivate',
+            'email' => 'todeactivate@tefa.local',
             'password' => bcrypt('password'),
             'is_active' => true,
         ]);
 
         $this->actingAs($superAdmin)
-            ->delete(route('admin.users.destroy', $userToDelete))
+            ->delete(route('admin.users.destroy', $userToDeactivate))
             ->assertRedirect(route('admin.users.index'))
             ->assertSessionHas('success');
 
-        $this->assertDatabaseMissing('users', ['id' => $userToDelete->id]);
+        $userToDeactivate->refresh();
+        $this->assertFalse($userToDeactivate->is_active);
+        $this->assertDatabaseHas('users', ['id' => $userToDeactivate->id, 'is_active' => false]);
     }
 
     public function test_super_admin_cannot_delete_self(): void

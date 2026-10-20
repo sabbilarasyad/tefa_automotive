@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ReminderSendRequest;
+use App\Http\Requests\Api\ReminderSendRequest;
 use App\Models\Reminder;
 use Illuminate\Http\JsonResponse;
 
@@ -11,6 +11,8 @@ class ReminderController extends Controller
 {
     public function index(): JsonResponse
     {
+        $this->authorize('manageReminders', Reminder::class);
+
         $query = Reminder::query()
             ->with(['pkb.customer', 'pkb.vehicle', 'vehicle.customer'])
             ->orderBy('reminder_date')
