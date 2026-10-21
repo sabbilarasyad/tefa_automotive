@@ -2,7 +2,6 @@
 
 use App\Http\Middleware\EnsureUserHasRole;
 use App\Http\Responses\ApiResponse;
-use App\Providers\AuthServiceProvider;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
@@ -30,7 +29,6 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withProviders([
-        AuthServiceProvider::class,
     ])
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
