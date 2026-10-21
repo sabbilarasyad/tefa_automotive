@@ -18,8 +18,7 @@ class CheckCommandTest extends TestCase
         config(['app.env' => 'local', 'app.debug' => true]);
 
         $this->artisan('tefa:check')
-            ->expectsOutputToContain('WARN')
-            ->expectsOutputToContain('bukan konfigurasi produksi')
+            ->expectsOutputToContain('WARN  bukan konfigurasi produksi')
             ->expectsOutputToContain('Lokal: belum siap produksi')
             ->assertExitCode(0);
     }
