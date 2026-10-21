@@ -35,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         DB::prohibitDestructiveCommands(
-    config('database.connections.mysql.database') === 'tefa_automotive'
+    app()->isProduction() || config('database.connections.mysql.database') === 'tefa_automotive'
         );
         Gate::policy(Sparepart::class, SparepartPolicy::class);
         Gate::policy(Reminder::class, ReminderPolicy::class);

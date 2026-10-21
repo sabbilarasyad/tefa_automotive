@@ -23,6 +23,8 @@ return Application::configure(basePath: dirname(__DIR__))
             fn (Request $request) => $request->is('api/*') ? null : route('login'),
         );
 
+        $middleware->trustProxies(at: '*');
+
         $middleware->alias([
             'role' => EnsureUserHasRole::class,
             'active' => \App\Http\Middleware\EnsureUserIsActive::class,
