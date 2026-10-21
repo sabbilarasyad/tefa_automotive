@@ -93,7 +93,7 @@ class BackupCommand extends Command
         $password = $config['password'] ?? '';
 
         // Get mysqldump path from config/env
-        $mysqldumpPath = config('database.mysqldump_path') ?? env('MYSQLDUMP_PATH', 'mysqldump');
+        $mysqldumpPath = config('database.mysqldump_path', 'mysqldump');
 
         $cmd = [$mysqldumpPath];
         $cmd[] = "--host={$host}";

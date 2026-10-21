@@ -73,9 +73,9 @@ class RestoreCommand extends Command
         $extension = pathinfo($archivePath, PATHINFO_EXTENSION);
         $isGz = $extension === 'gz';
 
-        $tarArgs = ['-xf', $archivePath, '-C', $destination];
+        $tarArgs = ['-xf', $archivePath, '-C', $destination, '--strip-components=1'];
         if ($isGz) {
-            $tarArgs = ['-xzf', $archivePath, '-C', $destination];
+            $tarArgs = ['-xzf', $archivePath, '-C', $destination, '--strip-components=1'];
         }
 
         $result = Process::timeout(300)->run(['tar', ...$tarArgs]);
@@ -116,7 +116,7 @@ class RestoreCommand extends Command
         $password = $config['password'] ?? '';
 
         // Get mysql path from config/env
-        $mysqlPath = config('database.mysql_path') ?? env('MYSQL_PATH', 'mysql');
+        $mysqlPath = config('database.mysql_path', 'mysql');
 
         $cmd = [$mysqlPath];
         $cmd[] = "--host={$host}";
@@ -128,7 +128,7 @@ class RestoreCommand extends Command
         $cmd[] = $database;
 
         $this->info("Restoring database using: {$mysqlPath}...");
-        $result = Process::timeout(120)->run($cmd, fn ($type, $output) => File::append($sqlFile, $output));
+        $result = Process::timeout(120)->input(File::get($sqlFile))->run($cmd);
 
         if ($result->failed()) {
             throw new RuntimeException("mysql restore failed: " . $result->errorOutput());

@@ -30,6 +30,9 @@ return [
     |
     */
 
+    'mysqldump_path' => env('MYSQLDUMP_PATH', 'mysqldump'),
+    'mysql_path' => env('MYSQL_PATH', 'mysql'),
+
     'connections' => [
 
         'sqlite' => [
@@ -60,8 +63,6 @@ return [
             'strict' => true,
             'engine' => null,
             'timezone' => '+07:00',
-            'mysqldump_path' => env('MYSQLDUMP_PATH', 'mysqldump'),
-            'mysql_path' => env('MYSQL_PATH', 'mysql'),
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 Mysql::ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
