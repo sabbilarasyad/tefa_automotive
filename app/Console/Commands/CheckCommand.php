@@ -5,15 +5,23 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Process;
-use RuntimeException;
 
 class CheckCommand extends Command
 {
-    protected $signature = 'tefa:check';
+    protected $signature = 'tefa:check {--production : Run strict production checks (exit 1 on any issue)}';
+
     protected $description = 'Check deployment readiness: PHP version, extensions, APP_DEBUG, DB connection, triggers/functions, storage link, writable dirs';
 
     public function handle(): int
+    {
+        if ($this->option('production')) {
+            return $this->runProductionChecks();
+        }
+
+        return $this->runStandardChecks();
+    }
+
+    private function runStandardChecks(): int
     {
         $checks = [
             ['PHP Version >= 8.4.1', $this->checkPhpVersion()],
@@ -40,13 +48,75 @@ class CheckCommand extends Command
         }
 
         $this->newLine();
+
+        $env = config('app.env');
+        $debug = config('app.debug');
+
+        if ($env !== 'production' || $debug) {
+            $this->warn('WARN  bukan konfigurasi produksi');
+            $this->line('Lokal: belum siap produksi');
+
+            return self::SUCCESS;
+        }
+
         if ($allPassed) {
             $this->info('All checks passed. Ready for deployment.');
+
             return self::SUCCESS;
         } else {
             $this->error('Some checks failed. Please fix before deploying.');
+
             return self::FAILURE;
         }
+    }
+
+    private function runProductionChecks(): int
+    {
+        $failures = [];
+
+        $env = config('app.env');
+        $debug = config('app.debug');
+        $timezone = config('app.timezone');
+
+        if ($env !== 'production') {
+            $failures[] = "APP_ENV={$env} (harus production)";
+        }
+
+        if ($debug) {
+            $failures[] = 'APP_DEBUG=true (harus false)';
+        }
+
+        if ($timezone !== 'Asia/Jakarta') {
+            $failures[] = "APP_TIMEZONE={$timezone} (harus Asia/Jakarta)";
+        }
+
+        // Check for demo accounts
+        $demoUsernames = ['headtefa', 'admincs', 'mekanik', 'kasir'];
+        try {
+            $found = DB::table('users')
+                ->whereIn('username', $demoUsernames)
+                ->pluck('username')
+                ->toArray();
+            if (! empty($found)) {
+                $failures[] = 'Akun demo ditemukan: '.implode(', ', $found);
+            }
+        } catch (\Throwable $e) {
+            $failures[] = 'Tidak dapat memeriksa akun demo: '.$e->getMessage();
+        }
+
+        if (empty($failures)) {
+            $this->info('Production check passed.');
+
+            return self::SUCCESS;
+        }
+
+        foreach ($failures as $failure) {
+            $this->line("<fg=red>✗ FAIL</>  {$failure}");
+        }
+        $this->newLine();
+        $this->error('Production check GAGAL. Perbaiki sebelum deploy.');
+
+        return self::FAILURE;
     }
 
     private function checkPhpVersion(): array
@@ -54,6 +124,7 @@ class CheckCommand extends Command
         $version = PHP_VERSION;
         $required = '8.4.1';
         $ok = version_compare($version, $required, '>=');
+
         return [
             'ok' => $ok,
             'message' => $ok ? "PHP {$version} >= {$required}" : "PHP {$version} < {$required} (required {$required}+)",
@@ -72,22 +143,22 @@ class CheckCommand extends Command
             if (extension_loaded($ext)) {
                 $present[] = $ext;
             } else {
-                $missing[] = $ext . ' (required)';
+                $missing[] = $ext.' (required)';
             }
         }
 
         foreach ($optional as $ext) {
             if (extension_loaded($ext)) {
-                $present[] = $ext . ' (optional)';
+                $present[] = $ext.' (optional)';
             } else {
-                $present[] = $ext . ' (optional, missing)';
+                $present[] = $ext.' (optional, missing)';
             }
         }
 
         return [
             'ok' => empty($missing),
-            'message' => empty($missing) ? 'All required extensions loaded' : 'Missing: ' . implode(', ', $missing),
-            'details' => 'Loaded: ' . implode(', ', $present),
+            'message' => empty($missing) ? 'All required extensions loaded' : 'Missing: '.implode(', ', $missing),
+            'details' => 'Loaded: '.implode(', ', $present),
         ];
     }
 
@@ -108,7 +179,7 @@ class CheckCommand extends Command
         return [
             'ok' => true,
             'message' => 'APP_DEBUG correctly set',
-            'details' => "APP_ENV={$env}, APP_DEBUG=" . ($debug ? 'true' : 'false'),
+            'details' => "APP_ENV={$env}, APP_DEBUG=".($debug ? 'true' : 'false'),
         ];
     }
 
@@ -117,6 +188,7 @@ class CheckCommand extends Command
         try {
             DB::connection()->getPdo();
             $driver = DB::connection()->getDriverName();
+
             return [
                 'ok' => true,
                 'message' => 'Database connection successful',
@@ -125,7 +197,7 @@ class CheckCommand extends Command
         } catch (\Throwable $e) {
             return [
                 'ok' => false,
-                'message' => 'Database connection failed: ' . $e->getMessage(),
+                'message' => 'Database connection failed: '.$e->getMessage(),
             ];
         }
     }
@@ -133,12 +205,14 @@ class CheckCommand extends Command
     private function checkTriggers(): array
     {
         $required = ['trg_pkb_status_history', 'trg_prevent_negative_stock', 'trg_stock_movement_apply'];
+
         return $this->checkDbObjects('TRIGGERS', $required);
     }
 
     private function checkFunctions(): array
     {
         $required = ['fn_calculate_pkb_total', 'fn_documentation_complete'];
+
         return $this->checkDbObjects('FUNCTIONS', $required);
     }
 
@@ -150,14 +224,14 @@ class CheckCommand extends Command
                 return [
                     'ok' => true,
                     'message' => "Skipped {$type} check (not MySQL)",
-                    'details' => "Driver: " . DB::connection()->getDriverName(),
+                    'details' => 'Driver: '.DB::connection()->getDriverName(),
                 ];
             }
 
             $column = $type === 'TRIGGERS' ? 'TRIGGER_NAME' : 'ROUTINE_NAME';
             $table = $type === 'TRIGGERS' ? 'TRIGGERS' : 'ROUTINES';
             $schemaColumn = $type === 'TRIGGERS' ? 'TRIGGER_SCHEMA' : 'ROUTINE_SCHEMA';
-            $condition = $type === 'TRIGGERS' ? "" : "AND ROUTINE_TYPE = 'FUNCTION'";
+            $condition = $type === 'TRIGGERS' ? '' : "AND ROUTINE_TYPE = 'FUNCTION'";
 
             $existing = DB::select(
                 "SELECT {$column} FROM INFORMATION_SCHEMA.{$table} WHERE {$schemaColumn} = DATABASE() {$condition}"
@@ -170,19 +244,19 @@ class CheckCommand extends Command
                 return [
                     'ok' => true,
                     'message' => "All {$type} present",
-                    'details' => 'Found: ' . implode(', ', $existingNames),
+                    'details' => 'Found: '.implode(', ', $existingNames),
                 ];
             }
 
             return [
                 'ok' => false,
-                'message' => 'Missing ' . $type . ': ' . implode(', ', $missing),
-                'details' => 'Found: ' . implode(', ', $existingNames),
+                'message' => 'Missing '.$type.': '.implode(', ', $missing),
+                'details' => 'Found: '.implode(', ', $existingNames),
             ];
         } catch (\Throwable $e) {
             return [
                 'ok' => false,
-                'message' => "Failed to check {$type}: " . $e->getMessage(),
+                'message' => "Failed to check {$type}: ".$e->getMessage(),
             ];
         }
     }
@@ -196,7 +270,7 @@ class CheckCommand extends Command
             return [
                 'ok' => false,
                 'message' => 'Storage link not found at public/storage',
-                'details' => "Run: php artisan storage:link",
+                'details' => 'Run: php artisan storage:link',
             ];
         }
 
@@ -231,10 +305,11 @@ class CheckCommand extends Command
             ];
         }
 
-        $testFile = $fullPath . '/.write_test_' . uniqid();
+        $testFile = $fullPath.'/.write_test_'.uniqid();
         try {
             File::put($testFile, 'test');
             File::delete($testFile);
+
             return [
                 'ok' => true,
                 'message' => "{$path} is writable",
@@ -242,7 +317,7 @@ class CheckCommand extends Command
         } catch (\Throwable $e) {
             return [
                 'ok' => false,
-                'message' => "{$path} is not writable: " . $e->getMessage(),
+                'message' => "{$path} is not writable: ".$e->getMessage(),
             ];
         }
     }

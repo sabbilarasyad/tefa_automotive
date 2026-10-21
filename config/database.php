@@ -59,6 +59,7 @@ return [
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => null,
+            'timezone' => '+07:00',
             'mysqldump_path' => env('MYSQLDUMP_PATH', 'mysqldump'),
             'mysql_path' => env('MYSQL_PATH', 'mysql'),
             'options' => extension_loaded('pdo_mysql') ? array_filter([

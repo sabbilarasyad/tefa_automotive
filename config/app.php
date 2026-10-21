@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => env('APP_TIMEZONE', 'Asia/Jakarta'),
 
     /*
     |--------------------------------------------------------------------------
@@ -123,7 +123,7 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-'admin_username' => env('ADMIN_USERNAME'),
+    'admin_username' => env('ADMIN_USERNAME'),
     'admin_password' => env('ADMIN_PASSWORD'),
 
 ];

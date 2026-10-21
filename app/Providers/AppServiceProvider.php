@@ -52,7 +52,10 @@ class AppServiceProvider extends ServiceProvider
                 ->get());
         });
 
-        $this->app->rebinding('request', function ($app): void {
+                /** @var \Illuminate\Foundation\Application $container */
+        $container = $this->app;
+
+        $container->rebinding('request', function ($app): void {
             if ($app->resolved('auth')) {
                 $app['auth']->guard('sanctum')->forgetUser();
             }
