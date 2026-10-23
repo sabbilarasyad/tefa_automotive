@@ -77,7 +77,7 @@
                             @endif
                             
                             {{-- Reply via email button --}}
-                            <a href="mailto:{{ $message->email }}?subject={{ urlencode('Re: ' . $message->subject) }}&body={{ urlencode('Halo ' . $message->name . ',\n\nTerima kasih telah menghubungi TEFA Automotive. Kami telah menerima pesan Anda dengan subjek: ' . $message->subject . '\n\nKami akan segera merespons pesan Anda.\n\nSalam,\nTim TEFA Automotive') }}" class="btn-secondary text-sm px-3 py-1" title="Balas via email">
+                            <a href="mailto:{{ $message->email }}?subject={{ urlencode('Re: ' . $message->subject) }}&body={{ urlencode('Halo ' . $message->name . ',' . "\n" . '' . "\n" . 'Terima kasih telah menghubungi TEFA Automotive. Kami telah menerima pesan Anda dengan subjek: ' . $message->subject . '' . "\n" . '' . "\n" . 'Kami akan segera merespons pesan Anda.' . "\n" . '' . "\n" . 'Salam,' . "\n" . 'Tim TEFA Automotive') }}" class="btn-secondary text-sm px-3 py-1" title="Balas via email">
                                 <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                                 Balas
                             </a>
