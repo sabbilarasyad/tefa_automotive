@@ -48,7 +48,7 @@
                             <tr class="hover:bg-[#f9fbfa]">
                                 <td class="px-5 py-4"><a href="{{ route('admin.pkb.show', $pkb) }}" class="font-bold text-[var(--orange-deep)] hover:underline">{{ $pkb->number }}</a><p class="mt-1 text-xs text-[var(--muted)]">{{ $pkb->service_date->format('d M Y, H:i') }}</p></td>
                                 <td class="px-5 py-4"><p class="font-semibold">{{ $pkb->customer->name }}</p><p class="mt-1 text-xs text-[var(--muted)]">{{ $pkb->vehicle->plate_number }} · {{ $pkb->vehicle->brand }} {{ $pkb->vehicle->model }}</p></td>
-                                <td class="px-5 py-4">{{ $pkb->mechanic?->name ?? 'Belum ditugaskan' }}</td>
+                                <td class="px-5 py-4">{{ $pkb->mechanic_display_name ?? 'Belum ditugaskan' }}</td>
                                 <td class="px-5 py-4"><span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold {{ $statusClass }}">{{ $statusLabel }}</span></td>
                                 <td class="px-5 py-4 text-right font-semibold">Rp{{ number_format((float) $pkb->estimated_total, 0, ',', '.') }}</td>
                             </tr>

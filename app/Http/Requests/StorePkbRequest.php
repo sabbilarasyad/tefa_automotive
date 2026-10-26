@@ -32,6 +32,7 @@ class StorePkbRequest extends FormRequest
             'vehicle.vin' => ['nullable', 'string', 'max:100', 'unique:vehicles,vin'],
             'vehicle.engine_number' => ['nullable', 'string', 'max:100'],
             'vehicle.current_km' => ['nullable', 'integer', 'min:0'],
+            'mechanic_name' => ['nullable', 'string', 'max:150'],
             'complaint' => ['required', 'string'],
             'inspection_result' => ['nullable', 'string'],
             'service_date' => ['nullable', 'date'],

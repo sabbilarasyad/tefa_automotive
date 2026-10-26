@@ -73,6 +73,7 @@
                                 <option value="{{ $mechanic->id }}" @selected(old('mechanic_id') == $mechanic->id)>{{ $mechanic->name }}</option>
                             @endforeach
                         </select>
+                        <input class="form-field mt-2" name="mechanic_name" maxlength="150" placeholder="atau ketik nama mekanik manual" value="{{ old('mechanic_name') }}">
                     </div>
                 </div>
             </div>

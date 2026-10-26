@@ -17,7 +17,7 @@
             <section class="border border-[var(--line)] bg-white p-5 sm:p-6">
                 <div class="flex flex-wrap items-center justify-between gap-3">
                     <div><p class="text-xs font-semibold uppercase text-[var(--muted)]">Keluhan</p><p class="mt-1 font-semibold">{{ $pkb->complaint }}</p></div>
-                    <div class="text-right"><p class="text-xs font-semibold uppercase text-[var(--muted)]">Mekanik</p><p class="mt-1 font-semibold">{{ $pkb->mechanic?->name ?? 'Belum ditugaskan' }}</p></div>
+                    <div class="text-right"><p class="text-xs font-semibold uppercase text-[var(--muted)]">Mekanik</p><p class="mt-1 font-semibold">{{ $pkb->mechanic_display_name ?? 'Belum ditugaskan' }}</p></div>
                 </div>
                 @if ($pkb->status === 'WAITING_MECHANIC')
                     @can('startWork', $pkb)
@@ -96,7 +96,7 @@
                 <p class="mt-2 text-sm">{{ $pkb->status === 'IN_PROGRESS' ? 'Sedang dikerjakan' : ($pkb->status === 'WAITING_MECHANIC' ? 'Menunggu dikerjakan' : str_replace('_', ' ', $pkb->status)) }}</p>
                 <dl class="mt-4 space-y-3 text-sm">
                     <div class="flex justify-between gap-3"><dt class="text-[var(--muted)]">Mulai</dt><dd>{{ $pkb->started_at?->format('d/m/Y H:i') ?? '-' }}</dd></div>
-                    <div class="flex justify-between gap-3"><dt class="text-[var(--muted)]">Ditugaskan</dt><dd class="text-right">{{ $pkb->mechanic?->name ?? '-' }}</dd></div>
+                    <div class="flex justify-between gap-3"><dt class="text-[var(--muted)]">Ditugaskan</dt><dd class="text-right">{{ $pkb->mechanic_display_name ?? '-' }}</dd></div>
                 </dl>
             </section>
             @if ($pkb->invoice)

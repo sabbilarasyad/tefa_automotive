@@ -15,8 +15,10 @@ class AssignMechanicRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'mechanic_name' => ['nullable', 'string', 'max:150', 'required_without:mechanic_id'],
             'mechanic_id' => [
-                'required',
+                'nullable',
+                'required_without:mechanic_name',
                 'integer',
                 Rule::exists('users', 'id')->where('is_active', true),
             ],

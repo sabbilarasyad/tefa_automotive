@@ -165,7 +165,7 @@ class ReportService
     {
         $query = Pkb::query()
             ->with(['mechanic', 'services', 'spareparts'])
-            ->whereNotNull('mechanic_id');
+            ->where(fn ($q) => $q->whereNotNull('mechanic_id')->orWhereNotNull('mechanic_name'));
 
         if ($mechanicId) {
             $query->where('mechanic_id', $mechanicId);
@@ -195,7 +195,7 @@ class ReportService
 
             return [
                 'pkb_number' => $pkb->number,
-                'mechanic' => $pkb->mechanic->name ?? '-',
+                'mechanic' => $pkb->mechanic_display_name ?? '-',
                 'service_date' => $pkb->service_date->format('d/m/Y'),
                 'total_required' => $requiredItems->count(),
                 'completed' => $completedItems->count(),

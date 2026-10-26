@@ -47,6 +47,7 @@ class PkbWorkflowService
                     'vehicle_id' => $vehicle->id,
                     'created_by' => $creator->id,
                     'mechanic_id' => $mechanic?->id,
+                    'mechanic_name' => $mechanic === null && filled($data['mechanic_name'] ?? null) ? trim((string) $data['mechanic_name']) : null,
                     'complaint' => $data['complaint'],
                     'inspection_result' => $data['inspection_result'] ?? null,
                     'status' => $hasEnoughStock ? 'WAITING_MECHANIC' : 'WAITING_PARTS',
@@ -112,6 +113,22 @@ class PkbWorkflowService
         });
     }
 
+    public function assignMechanicName(Pkb $pkb, string $name, User $actor): Pkb
+    {
+        return DB::transaction(function () use ($pkb, $name, $actor): Pkb {
+            $this->setCurrentUser($actor);
+
+            try {
+                $lockedPkb = Pkb::query()->lockForUpdate()->findOrFail($pkb->id);
+                $lockedPkb->update(['mechanic_id' => null, 'mechanic_name' => trim($name)]);
+
+                return $lockedPkb->load(['customer', 'vehicle', 'mechanic', 'services', 'spareparts']);
+            } finally {
+                $this->clearCurrentUser();
+            }
+        });
+    }
+
     public function assignMechanic(Pkb $pkb, User $mechanic, User $actor): Pkb
     {
         return DB::transaction(function () use ($pkb, $mechanic, $actor): Pkb {
@@ -127,7 +144,7 @@ class PkbWorkflowService
                     ]);
                 }
 
-                $lockedPkb->update(['mechanic_id' => $mechanic->id]);
+                $lockedPkb->update(['mechanic_id' => $mechanic->id, 'mechanic_name' => null]);
 
                 return $lockedPkb->load(['customer', 'vehicle', 'mechanic', 'services', 'spareparts']);
             } finally {
@@ -234,7 +251,7 @@ class PkbWorkflowService
                 'unit_price' => $item->unit_price,
                 'subtotal' => $item->subtotal,
             ])->all(),
-            'mechanic' => $pkb->mechanic?->only(['name']),
+            'mechanic' => $pkb->mechanic_display_name !== null ? ['name' => $pkb->mechanic_display_name] : null,
             'estimated_total' => $pkb->estimated_total,
         ];
     }

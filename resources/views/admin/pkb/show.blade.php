@@ -28,7 +28,7 @@
             @can('viewProgress', $pkb)
                 <a class="btn-secondary text-sm" href="{{ route('admin.pkb.progress.show', $pkb) }}">Input Progres</a>
             @endcan
-            @if ($pkb->mechanic_id)
+            @if ($pkb->mechanic_id || $pkb->mechanic_name)
                 @can('print', $pkb)
                     <a class="btn-primary text-sm" href="{{ route('admin.pkb.print', $pkb) }}">Cetak PKB</a>
                 @endcan
@@ -108,18 +108,19 @@
         <aside class="space-y-5">
             <section class="border border-[var(--line)] bg-white p-5">
                 <h2 class="font-bold">Mekanik bertugas</h2>
-                <p class="mt-2 text-sm text-[var(--muted)]">{{ $pkb->mechanic?->name ?? 'Belum ditugaskan' }}</p>
+                <p class="mt-2 text-sm text-[var(--muted)]">{{ $pkb->mechanic_display_name ?? 'Belum ditugaskan' }}</p>
                 @can('assignMechanic', $pkb)
                     <form method="POST" action="{{ route('admin.pkb.assign-mechanic', $pkb) }}" class="mt-4 space-y-3">
                         @csrf
-                        <label class="form-label" for="mechanic_id">{{ $pkb->mechanic_id ? 'Ganti mekanik' : 'Tugaskan mekanik' }}</label>
-                        <select class="form-field" id="mechanic_id" name="mechanic_id" required>
+                        <label class="form-label" for="mechanic_id">{{ ($pkb->mechanic_id || $pkb->mechanic_name) ? 'Ganti mekanik' : 'Tugaskan mekanik' }}</label>
+                        <select class="form-field" id="mechanic_id" name="mechanic_id">
                             <option value="">Pilih mekanik</option>
                             @foreach ($mechanics as $mechanic)
                                 <option value="{{ $mechanic->id }}" @selected($pkb->mechanic_id === $mechanic->id)>{{ $mechanic->name }}</option>
                             @endforeach
                         </select>
-                        <button class="btn-primary w-full text-sm" type="submit">{{ $pkb->mechanic_id ? 'Simpan penugasan ulang' : 'Tugaskan mekanik' }}</button>
+                        <input class="form-field" name="mechanic_name" maxlength="150" placeholder="atau ketik nama mekanik manual" value="{{ old('mechanic_name') }}">
+                        <button class="btn-primary w-full text-sm" type="submit">{{ ($pkb->mechanic_id || $pkb->mechanic_name) ? 'Simpan penugasan ulang' : 'Tugaskan mekanik' }}</button>
                     </form>
                 @endcan
             </section>

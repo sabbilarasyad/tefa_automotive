@@ -51,7 +51,7 @@ class PkbPolicy
 
     public function print(User $user, Pkb $pkb): bool
     {
-        return $user->hasPermission('pkb.print') && $pkb->mechanic_id !== null;
+        return $user->hasPermission('pkb.print') && ($pkb->mechanic_id !== null || filled($pkb->mechanic_name));
     }
 
     public function viewOwn(User $user, Pkb $pkb): bool

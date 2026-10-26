@@ -27,6 +27,11 @@ class Pkb extends Model
         ];
     }
 
+    public function getMechanicDisplayNameAttribute(): ?string
+    {
+        return $this->mechanic?->name ?? $this->mechanic_name;
+    }
+
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);

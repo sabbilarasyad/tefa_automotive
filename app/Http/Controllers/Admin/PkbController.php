@@ -116,8 +116,11 @@ class PkbController extends Controller
 
     public function assignMechanic(AssignMechanicRequest $request, Pkb $pkb): RedirectResponse
     {
-        $mechanic = User::findOrFail($request->validated('mechanic_id'));
-        $this->workflow->assignMechanic($pkb, $mechanic, $request->user());
+        if ($request->filled('mechanic_id')) {
+            $this->workflow->assignMechanic($pkb, User::findOrFail($request->validated('mechanic_id')), $request->user());
+        } else {
+            $this->workflow->assignMechanicName($pkb, (string) $request->validated('mechanic_name'), $request->user());
+        }
 
         return back()->with('success', 'Mekanik berhasil ditugaskan.');
     }
