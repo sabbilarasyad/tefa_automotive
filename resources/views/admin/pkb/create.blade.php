@@ -36,10 +36,10 @@
                     <div id="new-customer-fields" class="hidden space-y-3">
                         <input class="form-field" name="customer[name]" placeholder="Nama customer" value="{{ old('customer.name') }}">
                         <div class="grid gap-3 sm:grid-cols-2">
-                            <input class="form-field" name="customer[phone]" placeholder="Nomor HP">
-                            <input class="form-field" name="customer[email]" type="email" placeholder="Email (opsional)">
+                            <input class="form-field" name="customer[phone]" placeholder="Nomor HP" value="{{ old('customer.phone') }}">
+                            <input class="form-field" name="customer[email]" type="email" placeholder="Email (opsional)" value="{{ old('customer.email') }}">
                         </div>
-                        <input class="form-field" name="customer[address]" placeholder="Alamat (opsional)">
+                        <input class="form-field" name="customer[address]" placeholder="Alamat (opsional)" value="{{ old('customer.address') }}">
                     </div>
                     <div id="existing-vehicle-fields" class="space-y-2">
                         <label class="form-label" for="vehicle-select">Kendaraan terdaftar</label>
@@ -166,12 +166,13 @@
         setFieldsDisabled(document.querySelector('#new-customer-fields'), true);
         setFieldsDisabled(document.querySelector('#new-vehicle-fields'), true);
 
-        customerSearch.addEventListener('input', () => {
+        function syncCustomerFromSearch() {
             const customer = customers.find(item => `${item.name} · ${item.phone}` === customerSearch.value);
             customerId.value = customer?.id || '';
             vehicleSelect.innerHTML = '<option value="">Pilih kendaraan</option>' + (customer?.vehicles || []).map(vehicle => `<option value="${vehicle.id}">${escapeHtml(vehicle.plate_number)} · ${escapeHtml(vehicle.brand)} ${escapeHtml(vehicle.model)}</option>`).join('');
             vehicleId.value = '';
-        });
+        }
+        customerSearch.addEventListener('input', syncCustomerFromSearch);
         vehicleSelect.addEventListener('change', () => vehicleId.value = vehicleSelect.value);
 
         document.querySelector('#new-customer-toggle').addEventListener('click', event => {
@@ -180,6 +181,7 @@
             document.querySelector('#existing-customer-fields').classList.toggle('hidden', useNew);
             customerId.disabled = useNew;
             customerId.value = '';
+            if (!useNew) syncCustomerFromSearch();
             if (useNew) {
                 vehicleSelect.value = '';
                 vehicleId.value = '';
