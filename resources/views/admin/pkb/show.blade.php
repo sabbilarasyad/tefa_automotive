@@ -61,7 +61,7 @@
                 <h2 class="mb-4 font-bold">Customer & kendaraan</h2>
                 <div class="grid gap-4 sm:grid-cols-2">
                     <div><p class="text-xs font-semibold uppercase text-[var(--muted)]">Customer</p><p class="mt-1 font-semibold">{{ $pkb->customer->name }}</p><p class="text-sm text-[var(--muted)]">{{ $pkb->customer->phone }}</p></div>
-                    <div><p class="text-xs font-semibold uppercase text-[var(--muted)]">Kendaraan</p><p class="mt-1 font-semibold">{{ $pkb->vehicle->plate_number }}</p><p class="text-sm text-[var(--muted)]">{{ $pkb->vehicle->brand }} {{ $pkb->vehicle->model }} · {{ number_format($pkb->vehicle->current_km ?? 0, 0, ',', '.') }} km</p></div>
+                    <div><p class="text-xs font-semibold uppercase text-[var(--muted)]">Kendaraan</p><p class="mt-1 font-semibold">{{ $pkb->vehicle->plate_number }}</p><p class="text-sm text-[var(--muted)]">{{ $pkb->vehicle->brand }} {{ $pkb->vehicle->model }} · {{ number_format($pkb->vehicle->current_km ?? 0, 0, ',', '.') }} km</p><p class="text-xs text-[var(--muted)]">Rangka: {{ $pkb->vehicle->vin ?? '-' }} &middot; Mesin: {{ $pkb->vehicle->engine_number ?? '-' }}</p></div>
                 </div>
                 <div class="section-rule mt-5 grid gap-4 pt-5 sm:grid-cols-2">
                     <div><p class="text-xs font-semibold uppercase text-[var(--muted)]">Keluhan</p><p class="mt-1 whitespace-pre-line">{{ $pkb->complaint }}</p></div>

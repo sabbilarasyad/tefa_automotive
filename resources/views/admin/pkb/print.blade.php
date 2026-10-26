@@ -9,7 +9,7 @@
     <h2>Customer & kendaraan</h2>
     <section class="grid">
         <div class="block"><p><strong>Nama:</strong> {{ $document['customer']['name'] }}</p><p><strong>Telepon:</strong> {{ $document['customer']['phone'] }}</p><p><strong>Alamat:</strong> {{ $document['customer']['address'] ?: '-' }}</p></div>
-        <div class="block"><p><strong>Nomor polisi:</strong> {{ $document['vehicle']['plate_number'] }}</p><p><strong>Kendaraan:</strong> {{ $document['vehicle']['brand'] }} {{ $document['vehicle']['model'] }} {{ $document['vehicle']['year'] }}</p><p><strong>KM:</strong> {{ number_format($document['vehicle']['current_km'] ?? 0, 0, ',', '.') }}</p></div>
+        <div class="block"><p><strong>Nomor polisi:</strong> {{ $document['vehicle']['plate_number'] }}</p><p><strong>Kendaraan:</strong> {{ $document['vehicle']['brand'] }} {{ $document['vehicle']['model'] }} {{ $document['vehicle']['year'] }}</p><p><strong>No. Rangka:</strong> {{ $document['vehicle']['vin'] ?? '-' }}</p><p><strong>No. Mesin:</strong> {{ $document['vehicle']['engine_number'] ?? '-' }}</p><p><strong>KM:</strong> {{ number_format($document['vehicle']['current_km'] ?? 0, 0, ',', '.') }}</p></div>
     </section>
 
     <h2>Keluhan customer</h2>

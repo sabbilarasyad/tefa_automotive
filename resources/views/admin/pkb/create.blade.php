@@ -48,12 +48,12 @@
                     </div>
                     <button type="button" id="new-vehicle-toggle" class="text-sm font-semibold text-[var(--orange-deep)]">+ Kendaraan baru</button>
                     <div id="new-vehicle-fields" class="hidden grid gap-3 sm:grid-cols-2">
-                        <input class="form-field" name="vehicle[plate_number]" placeholder="Nomor polisi">
-                        <input class="form-field" name="vehicle[brand]" placeholder="Merek">
-                        <input class="form-field" name="vehicle[model]" placeholder="Model">
-                        <input class="form-field" name="vehicle[current_km]" type="number" min="0" placeholder="KM saat ini">
-                        <input class="form-field" name="vehicle[year]" type="number" min="1900" max="2100" placeholder="Tahun">
-                        <input class="form-field" name="vehicle[color]" placeholder="Warna">
+                        <input class="form-field" name="vehicle[plate_number]" placeholder="Nomor polisi" value="{{ old('vehicle.plate_number') }}">
+                        <input class="form-field" name="vehicle[brand]" placeholder="Merek" value="{{ old('vehicle.brand') }}">
+                        <input class="form-field" name="vehicle[model]" placeholder="Model" value="{{ old('vehicle.model') }}">
+                        <input class="form-field" name="vehicle[current_km]" type="number" min="0" placeholder="KM saat ini" value="{{ old('vehicle.current_km') }}">
+                        <input class="form-field" name="vehicle[year]" type="number" min="1900" max="2100" placeholder="Tahun" value="{{ old('vehicle.year') }}">
+                        <input class="form-field" name="vehicle[color]" placeholder="Warna" value="{{ old('vehicle.color') }}"><input class="form-field" name="vehicle[vin]" maxlength="100" placeholder="No. Rangka (opsional)" value="{{ old('vehicle.vin') }}"><input class="form-field" name="vehicle[engine_number]" maxlength="100" placeholder="No. Mesin (opsional)" value="{{ old('vehicle.engine_number') }}">
                     </div>
                 </div>
                 <div class="space-y-4">

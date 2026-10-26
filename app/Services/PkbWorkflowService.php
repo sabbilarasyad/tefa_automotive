@@ -219,7 +219,7 @@ class PkbWorkflowService
             'service_date' => $pkb->service_date?->format('Y-m-d H:i'),
             'status' => $pkb->status,
             'customer' => $pkb->customer->only(['name', 'phone', 'address']),
-            'vehicle' => $pkb->vehicle->only(['plate_number', 'brand', 'model', 'year', 'color', 'current_km']),
+            'vehicle' => $pkb->vehicle->only(['plate_number', 'brand', 'model', 'year', 'color', 'vin', 'engine_number', 'current_km']),
             'complaint' => $pkb->complaint,
             'inspection_result' => $pkb->inspection_result,
             'services' => $pkb->services->map(fn ($item): array => [
