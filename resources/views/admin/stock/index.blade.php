@@ -8,7 +8,9 @@
             <p class="mb-1 text-xs font-bold uppercase tracking-[0.12em] text-[var(--orange-deep)]">Gudang · Sparepart</p>
             <h1 class="text-2xl font-bold">Daftar Stok</h1>
         </div>
-        <div class="flex items-center gap-2">
+        <div class="flex flex-wrap items-center gap-2">
+            <a href="{{ route('admin.spareparts.create') }}" class="btn-primary text-sm">Tambah Sparepart</a>
+            <a href="{{ route('admin.spareparts.index') }}" class="btn-secondary text-sm">Kelola Data</a>
             <a href="{{ route('admin.stock.index', ['filter' => 'low']) }}" class="btn-secondary text-sm {{ $filter === 'low' ? 'bg-[var(--orange)] text-white' : '' }}">Menipis ({{ $lowStockCount }})</a>
             <a href="{{ route('admin.stock.index', ['filter' => 'ok']) }}" class="btn-secondary text-sm {{ $filter === 'ok' ? 'bg-[var(--orange)] text-white' : '' }}">Aman</a>
             <a href="{{ route('admin.stock.index') }}" class="btn-secondary text-sm {{ $filter === null ? 'bg-[var(--orange)] text-white' : '' }}">Semua</a>
